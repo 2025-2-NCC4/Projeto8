@@ -88,6 +88,56 @@ export const dashboardAPI = {
   async getStatus() {
     const response = await api.get('/status');
     return response.data;
+  },
+
+  // Financial Analysis APIs
+  async getOperatingMargin(filters = {}) {
+    const response = await api.get('/financial/operating-margin', { params: filters });
+    return response.data;
+  },
+
+  async getNetRevenue(filters = {}) {
+    const response = await api.get('/financial/net-revenue', { params: filters });
+    return response.data;
+  },
+
+  // Coupon Performance APIs
+  async getCouponPerformanceByType(filters = {}) {
+    const response = await api.get('/coupons/performance-by-type', { params: filters });
+    return response.data;
+  },
+
+  async getCouponUsageTrends(filters = {}) {
+    const response = await api.get('/coupons/usage-trends', { params: filters });
+    return response.data;
+  },
+
+  // Temporal Analysis APIs
+  async getDailyParticipation(filters = {}) {
+    const response = await api.get('/temporal/daily-participation', { params: filters });
+    return response.data;
+  },
+
+  async getPeriodDistribution(filters = {}) {
+    const response = await api.get('/temporal/period-distribution', { params: filters });
+    return response.data;
+  },
+
+  // Enhanced Categories APIs
+  async getCategoriesDetailedAnalysis(filters = {}) {
+    const response = await api.get('/categories/detailed-analysis', { params: filters });
+    return response.data;
+  },
+
+  // Validation and Payout APIs
+  async getCouponSummary(filters = {}) {
+    const response = await api.get('/validation/coupon-summary', { params: filters });
+    return response.data;
+  },
+
+  async getPayoutTracking(filters = {}) {
+    const response = await api.get('/validation/payout-tracking', { params: filters });
+    return response.data;
   }
 };
 

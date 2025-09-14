@@ -2,6 +2,9 @@ import React, { useState, useEffect, createContext, useContext } from 'react';
 import { AlertTriangle } from 'lucide-react';
 import Navigation from './components/Navigation';
 import Dashboard from './pages/Dashboard';
+import FinancialAnalysis from './pages/FinancialAnalysis';
+import CouponAnalysis from './pages/CouponAnalysis';
+import ValidationScreen from './pages/ValidationScreen';
 import GeographicAnalysis from './pages/GeographicAnalysis';
 import UserAnalysis from './pages/UserAnalysis';
 import StoreAnalysis from './pages/StoreAnalysis';
@@ -60,6 +63,12 @@ const App = () => {
     switch (currentPage) {
       case 'dashboard':
         return <Dashboard filters={filters} onFiltersChange={handleFiltersChange} />;
+      case 'financial':
+        return <FinancialAnalysis filters={filters} />;
+      case 'coupons':
+        return <CouponAnalysis filters={filters} />;
+      case 'validation':
+        return <ValidationScreen filters={filters} />;
       case 'geographic':
         return <GeographicAnalysis filters={filters} />;
       case 'users':
