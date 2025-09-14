@@ -1,0 +1,227 @@
+
+
+.store-analysis-page {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.store-metrics {
+  margin-bottom: 0;
+  animation: slideInLeft 0.5s ease-out;
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.analysis-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  align-items: center;
+  background: var(--card-bg-color);
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: var(--card-shadow);
+  border: 1px solid var(--border-color);
+}
+
+.control-group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.control-group label {
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: var(--text-secondary-color);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.control-group select {
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--body-bg-color);
+  color: var(--text-primary-color);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.performance-table-container {
+  background: var(--card-bg-color);
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: var(--card-shadow);
+  border: 1px solid var(--border-color);
+  animation: slideInUp 0.6s ease-out;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.table-header p {
+  font-size: 0.9rem;
+  color: var(--text-secondary-color);
+  margin-top: -1rem;
+  margin-bottom: 1.5rem;
+}
+
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.performance-table {
+  width: 100%;
+  border-collapse: collapse;
+  white-space: nowrap;
+}
+
+.performance-table th, .performance-table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.performance-table th {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--text-secondary-color);
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.2s ease;
+}
+
+.performance-table th:hover {
+  color: var(--text-primary-color);
+}
+
+.sort-icon {
+  margin-left: 4px;
+  vertical-align: middle;
+  opacity: 0.6;
+}
+
+.sort-icon.asc, .sort-icon.desc {
+  opacity: 1;
+  color: #0D47A1;
+}
+
+.performance-table tbody tr {
+  transition: all 0.2s ease;
+}
+
+.performance-table tbody tr:hover {
+  background-color: var(--body-bg-color);
+  transform: scale(1.02);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.performance-table .top-performer {
+  background-color: rgba(255, 193, 7, 0.05);
+}
+
+.dark-theme .performance-table .top-performer {
+  background-color: rgba(255, 193, 7, 0.1);
+}
+
+.rank-cell {
+  font-weight: 700;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.medal-icon {
+  font-size: 1.2rem;
+  animation: bounceIn 0.6s ease-out;
+}
+
+@keyframes bounceIn {
+  0% { transform: scale(0.3); opacity: 0; }
+  50% { transform: scale(1.05); }
+  70% { transform: scale(0.9); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.store-name {
+  font-weight: 600;
+}
+
+.category-tag {
+  display: inline-block;
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  background-color: rgba(77, 175, 80, 0.1);
+  color: #4CAF50;
+}
+
+.dark-theme .category-tag {
+  background-color: rgba(77, 175, 80, 0.2);
+  color: #66BB6A;
+}
+
+.currency-cell, .number-cell {
+  font-family: 'monospace';
+  font-size: 0.95rem;
+}
+
+.additional-analysis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 2rem;
+}
+
+.analysis-item {
+  background: var(--card-bg-color);
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: var(--card-shadow);
+  border: 1px solid var(--border-color);
+  animation: fadeInScale 0.5s ease-out;
+  transition: all 0.3s ease;
+}
+
+.analysis-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.scatter-plot .custom-tooltip {
+  min-width: 200px;
+}
