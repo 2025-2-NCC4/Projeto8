@@ -1,0 +1,151 @@
+.heatmap-container {
+  padding: 1.5rem;
+  background: var(--card-background);
+  border-radius: 1rem;
+  box-shadow: 0 4px 20px var(--card-shadow);
+  border: 1px solid var(--border-color);
+}
+
+.heatmap-title {
+  color: var(--text-primary);
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0 0 2rem 0;
+  text-align: center;
+}
+
+.heatmap-chart {
+  display: grid;
+  gap: 0.5rem;
+  grid-template-areas:
+    ". hours"
+    "days grid";
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto 1fr;
+  margin-bottom: 1.5rem;
+}
+
+.heatmap-days-label {
+  grid-area: days;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  align-items: end;
+  padding-right: 0.5rem;
+}
+
+.day-label {
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  font-weight: 600;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.heatmap-grid {
+  grid-area: grid;
+  display: grid;
+  grid-template-columns: repeat(24, 1fr);
+  grid-template-rows: repeat(7, 20px);
+  gap: 1px;
+  background-color: var(--border-color);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.heatmap-cell {
+  background-color: rgba(99, 102, 241, 0.1);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  position: relative;
+}
+
+.heatmap-cell:hover {
+  transform: scale(1.1);
+  z-index: 10;
+  border-radius: 2px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.heatmap-hours-label {
+  grid-area: hours;
+  display: grid;
+  grid-template-columns: repeat(24, 1fr);
+  gap: 1px;
+  padding-bottom: 0.5rem;
+}
+
+.hour-label {
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.heatmap-legend {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.legend-label {
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.legend-gradient {
+  width: 100px;
+  height: 8px;
+  background: linear-gradient(to right, 
+    rgba(99, 102, 241, 0.1), 
+    rgba(99, 102, 241, 0.3), 
+    rgba(99, 102, 241, 0.6), 
+    rgba(99, 102, 241, 1)
+  );
+  border-radius: 4px;
+}
+
+.heatmap-tooltip {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  font-size: 0.875rem;
+  min-width: 180px;
+}
+
+.tooltip-header {
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.tooltip-content p {
+  margin: 0.25rem 0;
+  color: var(--text-secondary);
+}
+
+@media (max-width: 768px) {
+  .heatmap-grid {
+    grid-template-columns: repeat(12, 1fr);
+  }
+  
+  .heatmap-hours-label {
+    grid-template-columns: repeat(12, 1fr);
+  }
+  
+  .hour-label {
+    grid-column: span 2;
+  }
+}
