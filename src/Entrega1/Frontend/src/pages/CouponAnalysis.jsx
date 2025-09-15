@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import {
   FiTag,
@@ -33,7 +33,7 @@ const InsightCard = ({ icon, title, value, description, trend = "neutral" }) => 
   </motion.div>
 );
 
-const CouponAnalysis = ({ filters }) => {
+const CouponAnalysis = ({ filters, onError }) => {
   const [data, setData] = useState({
     performanceByType: [],
     usageTrends: [],
@@ -43,38 +43,38 @@ const CouponAnalysis = ({ filters }) => {
   });
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [hasInitialized, setHasInitialized] = useState(false);
 
-  const stableFilters = useMemo(() => filters, [JSON.stringify(filters)]);
-
-  const fetchData = useCallback(async (isRefresh = false) => {
+  const fetchData = useCallback(async (isRefresh = false, filtersToUse = filters) => {
     if (isRefresh) setRefreshing(true);
     else setLoading(true);
 
     try {
-      const timeout = new Promise((_, reject) =>
-        setTimeout(() => reject(new Error('Timeout')), 10000)
-      );
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 20000);
 
-      const dataPromise = Promise.all([
-        dashboardAPI.getCouponPerformanceByType(stableFilters),
-        dashboardAPI.getCouponUsageTrends(stableFilters),
-        dashboardAPI.getDailyParticipation(stableFilters),
-        dashboardAPI.getPeriodDistribution(stableFilters),
-        dashboardAPI.getCategoriesDetailedAnalysis(stableFilters)
+      const [performanceByType, usageTrends, dailyParticipation, periodDistribution, categoriesAnalysis] = await Promise.all([
+        dashboardAPI.getCouponPerformanceByType(filtersToUse),
+        dashboardAPI.getCouponUsageTrends(filtersToUse),
+        dashboardAPI.getDailyParticipation(filtersToUse),
+        dashboardAPI.getPeriodDistribution(filtersToUse),
+        dashboardAPI.getCategoriesDetailedAnalysis(filtersToUse)
       ]);
 
-      const [performanceByType, usageTrends, dailyParticipation, periodDistribution, categoriesAnalysis] = await Promise.race([dataPromise, timeout]);
+      clearTimeout(timeoutId);
 
       setData({
-        performanceByType,
-        usageTrends,
-        dailyParticipation,
-        periodDistribution,
-        categoriesAnalysis
+        performanceByType: performanceByType || [],
+        usageTrends: usageTrends || [],
+        dailyParticipation: dailyParticipation || [],
+        periodDistribution: periodDistribution || [],
+        categoriesAnalysis: categoriesAnalysis || []
       });
     } catch (error) {
       console.error('Erro ao carregar dados de cupons:', error);
-      // Set empty data to prevent infinite loading
+      if (onError) {
+        onError(`Erro ao carregar dados de cupons: ${error.message}`);
+      }
       setData({
         performanceByType: [],
         usageTrends: [],
@@ -85,12 +85,23 @@ const CouponAnalysis = ({ filters }) => {
     } finally {
       setLoading(false);
       setRefreshing(false);
+      setHasInitialized(true);
     }
-  }, [stableFilters]);
+  }, [onError]);
 
   useEffect(() => {
-    fetchData();
+    fetchData(false, filters);
   }, [fetchData]);
+
+  useEffect(() => {
+    if (hasInitialized) {
+      const timeoutId = setTimeout(() => {
+        fetchData(true, filters);
+      }, 500);
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [filters]);
 
   const handleRefresh = () => fetchData(true);
 

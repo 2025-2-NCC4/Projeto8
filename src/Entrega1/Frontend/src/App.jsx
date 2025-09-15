@@ -59,24 +59,34 @@ const App = () => {
     setFilters(newFilters);
   };
 
+  const handleError = (errorMessage) => {
+    setError(errorMessage);
+    setTimeout(() => setError(null), 10000); // Limpa o erro após 10 segundos
+  };
+
   const renderCurrentPage = () => {
+    const pageProps = {
+      filters,
+      onError: handleError,
+    };
+
     switch (currentPage) {
       case 'dashboard':
-        return <Dashboard filters={filters} onFiltersChange={handleFiltersChange} />;
+        return <Dashboard {...pageProps} onFiltersChange={handleFiltersChange} />;
       case 'financial':
-        return <FinancialAnalysis filters={filters} />;
+        return <FinancialAnalysis {...pageProps} />;
       case 'coupons':
-        return <CouponAnalysis filters={filters} />;
+        return <CouponAnalysis {...pageProps} />;
       case 'validation':
-        return <ValidationScreen filters={filters} />;
+        return <ValidationScreen {...pageProps} />;
       case 'geographic':
-        return <GeographicAnalysis filters={filters} />;
+        return <GeographicAnalysis {...pageProps} />;
       case 'users':
-        return <UserAnalysis filters={filters} />;
+        return <UserAnalysis {...pageProps} />;
       case 'stores':
-        return <StoreAnalysis filters={filters} />;
+        return <StoreAnalysis {...pageProps} />;
       default:
-        return <Dashboard filters={filters} onFiltersChange={handleFiltersChange} />;
+        return <Dashboard {...pageProps} onFiltersChange={handleFiltersChange} />;
     }
   };
 

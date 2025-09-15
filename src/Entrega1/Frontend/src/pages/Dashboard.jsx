@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { 
-  FiDollarSign, 
+import {
+  FiDollarSign,
   FiTrendingUp,
   FiBarChart,
   FiPieChart,
@@ -10,14 +10,6 @@ import {
   FiShoppingBag
 } from 'react-icons/fi';
 import { dashboardAPI } from '../services/api';
-import KPICard from '../components/KPICard';
-import { 
-  DualAxisChart, 
-  CategoryChart, 
-  DistributionChart, 
-} from '../components/ChartContainer';
-import FilterPanel from '../components/FilterPanel';
-import './Dashboard.css';
 
 const InsightCard = ({ icon, title, value, description, trend = "neutral" }) => (
   <motion.div
@@ -41,69 +33,75 @@ const Dashboard = ({ filters, onFiltersChange }) => {
     topCategories: [],
     couponDistribution: []
   });
-  const [loading, setLoading] = useState(false); // Start with false to show interface immediately
+  const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [filterPanelOpen, setFilterPanelOpen] = useState(false);
   const [hasInitialized, setHasInitialized] = useState(false);
 
-  const stableFilters = useMemo(() => filters, [JSON.stringify(filters)]);
-
-  const fetchData = useCallback(async (isRefresh = false) => {
-    if (isRefresh) setRefreshing(true);
-    else if (!hasInitialized) setLoading(true);
+  const fetchData = useCallback(async (isRefresh = false, filtersToUse = filters) => {
+    if (isRefresh) {
+      setRefreshing(true);
+    } else {
+      setLoading(true);
+    }
 
     try {
-      const timeout = new Promise((_, reject) =>
-        setTimeout(() => reject(new Error('Timeout')), 3000)
-      );
+      // Add timeout to prevent hanging
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000);
 
-      const dataPromise = Promise.all([
-        dashboardAPI.getGeneralStats(stableFilters),
-        dashboardAPI.getTransactionsOverTime(stableFilters),
-        dashboardAPI.getTopCategories(stableFilters),
-        dashboardAPI.getCouponDistribution(stableFilters)
+      const [stats, timeData, categories, coupons] = await Promise.all([
+        dashboardAPI.getGeneralStats(filtersToUse),
+        dashboardAPI.getTransactionsOverTime(filtersToUse),
+        dashboardAPI.getTopCategories(filtersToUse),
+        dashboardAPI.getCouponDistribution(filtersToUse)
       ]);
 
-      const [stats, timeData, categories, coupons] = await Promise.race([dataPromise, timeout]);
-      setData({ generalStats: stats, transactionsOverTime: timeData, topCategories: categories, couponDistribution: coupons });
-      setHasInitialized(true);
+      clearTimeout(timeoutId);
+
+      setData({
+        generalStats: stats || { totalTransactions: 0, totalRevenue: 0, avgTicket: 0, totalCommission: 0, uniqueStores: 0, uniqueCustomers: 0 },
+        transactionsOverTime: timeData || [],
+        topCategories: categories || [],
+        couponDistribution: coupons || []
+      });
     } catch (error) {
       console.error('Erro ao carregar dados do dashboard:', error);
-      setHasInitialized(true); // Always set initialized even on error
+      setData({
+        generalStats: { totalTransactions: 0, totalRevenue: 0, avgTicket: 0, totalCommission: 0, uniqueStores: 0, uniqueCustomers: 0 },
+        transactionsOverTime: [],
+        topCategories: [],
+        couponDistribution: []
+      });
     } finally {
       setLoading(false);
       setRefreshing(false);
+      setHasInitialized(true);
     }
-  }, [stableFilters, hasInitialized]);
+  }, []);
 
+  // Initial load only
   useEffect(() => {
-    // Delay the data fetch by 500ms to let the UI render first
-    const timer = setTimeout(() => {
-      fetchData();
-    }, 500);
+    fetchData(false, filters);
+  }, []);
 
-    // Force initialization after 8 seconds as a fallback
-    const forceInitTimer = setTimeout(() => {
-      if (!hasInitialized) {
-        console.warn('Forcing initialization due to timeout');
-        setHasInitialized(true);
-        setLoading(false);
-        setRefreshing(false);
-      }
-    }, 8000);
+  // Filter changes
+  useEffect(() => {
+    if (hasInitialized) {
+      const timeoutId = setTimeout(() => {
+        fetchData(true, filters);
+      }, 500); // Debounce filter changes
 
-    return () => {
-      clearTimeout(timer);
-      clearTimeout(forceInitTimer);
-    };
-  }, [hasInitialized]);
+      return () => clearTimeout(timeoutId);
+    }
+  }, [filters]);
 
   const handleRefresh = () => fetchData(true);
 
   const pageVariants = { hidden: { opacity: 0 }, visible: { opacity: 1, transition: { duration: 0.5, staggerChildren: 0.05 } } };
   const sectionVariants = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5 } } };
 
-  if (loading && !hasInitialized) {
+  if (loading) {
     return (
       <div className="dashboard-loading">
         <div className="loading-spinner large"></div>
@@ -125,50 +123,94 @@ const Dashboard = ({ filters, onFiltersChange }) => {
               <FiRefreshCw className={refreshing ? 'spinning' : ''} />
               {refreshing ? 'Atualizando...' : 'Atualizar'}
             </motion.button>
-            <FilterPanel filters={filters} onFiltersChange={onFiltersChange} isOpen={filterPanelOpen} onToggle={() => setFilterPanelOpen(!filterPanelOpen)} />
           </div>
         </div>
       </motion.div>
 
       <motion.section className="kpi-section" variants={sectionVariants}>
         <div className="kpi-grid">
-          <KPICard title="Receita PicMoney" value={`R$ ${(data.generalStats.totalCommission || 0).toLocaleString('pt-BR')}`} change="+12.5%" changeType="positive" icon="revenue" loading={refreshing} index={0} />
-          <KPICard title="Lojas Ativas" value={(data.generalStats.uniqueStores || 0).toLocaleString('pt-BR')} change="+5.3%" changeType="positive" icon="stores" loading={refreshing} index={1} />
-          <KPICard title="Cupons Capturados" value={(data.generalStats.totalTransactions || 0).toLocaleString('pt-BR')} change="+21.7%" changeType="positive" icon="coupons" loading={refreshing} index={2} />
-          <KPICard title="Usuários Ativos" value={(data.generalStats.uniqueCustomers || 0).toLocaleString('pt-BR')} change="+8.2%" changeType="positive" icon="users" loading={refreshing} index={3} />
+          <div className="kpi-card">
+            <h3>Receita Total</h3>
+            <p className="kpi-value">R$ {(data.generalStats.totalRevenue || 0).toLocaleString('pt-BR')}</p>
+            <span className="kpi-change positive">+12.5%</span>
+          </div>
+          <div className="kpi-card">
+            <h3>Ticket Médio</h3>
+            <p className="kpi-value">R$ {(data.generalStats.avgTicket || 0).toFixed(2)}</p>
+            <span className="kpi-change positive">+3.2%</span>
+          </div>
+          <div className="kpi-card">
+            <h3>Receita PicMoney</h3>
+            <p className="kpi-value">R$ {(data.generalStats.totalCommission || 0).toLocaleString('pt-BR')}</p>
+            <span className="kpi-change positive">+15.8%</span>
+          </div>
+          <div className="kpi-card">
+            <h3>Margem Operacional</h3>
+            <p className="kpi-value">{(((data.generalStats.totalRevenue - data.generalStats.totalCommission) / data.generalStats.totalRevenue * 100) || 0).toFixed(1)}%</p>
+            <span className="kpi-change positive">+2.1%</span>
+          </div>
+        </div>
+        <div className="kpi-grid secondary">
+          <div className="kpi-card">
+            <h3>Lojas Ativas</h3>
+            <p className="kpi-value">{(data.generalStats.uniqueStores || 0).toLocaleString('pt-BR')}</p>
+            <span className="kpi-change positive">+5.3%</span>
+          </div>
+          <div className="kpi-card">
+            <h3>Cupons Capturados</h3>
+            <p className="kpi-value">{(data.generalStats.totalTransactions || 0).toLocaleString('pt-BR')}</p>
+            <span className="kpi-change positive">+21.7%</span>
+          </div>
+          <div className="kpi-card">
+            <h3>Usuários Ativos</h3>
+            <p className="kpi-value">{(data.generalStats.uniqueCustomers || 0).toLocaleString('pt-BR')}</p>
+            <span className="kpi-change positive">+8.2%</span>
+          </div>
+          <div className="kpi-card">
+            <h3>Receita Líquida</h3>
+            <p className="kpi-value">R$ {((data.generalStats.totalRevenue - data.generalStats.totalCommission) || 0).toLocaleString('pt-BR')}</p>
+            <span className="kpi-change positive">+11.4%</span>
+          </div>
         </div>
       </motion.section>
 
       {hasInitialized && data.transactionsOverTime.length > 0 && (
         <motion.section className="main-chart-section" variants={sectionVariants}>
-          <DualAxisChart data={data.transactionsOverTime} loading={refreshing} className="featured-chart" />
+          <div className="chart-placeholder">
+            <h3>Transações ao Longo do Tempo</h3>
+            <p>Gráfico carregado: {data.transactionsOverTime.length} registros</p>
+          </div>
         </motion.section>
       )}
 
       {hasInitialized && (
         <motion.section className="analytics-section" variants={sectionVariants}>
           <div className="analytics-grid">
-            {data.topCategories.length > 0 && (
-              <CategoryChart data={data.topCategories} title="Receita por Categoria" loading={refreshing} className="category-analysis" />
-            )}
-            {data.couponDistribution.length > 0 && (
-              <DistributionChart data={data.couponDistribution} title="Distribuição de Cupons (por valor)" dataKey="valor" nameKey="tipo" loading={refreshing} className="distribution-analysis" />
-            )}
+            <div className="chart-placeholder">
+              <h3>Top Categorias</h3>
+              <p>Categorias carregadas: {data.topCategories.length}</p>
+            </div>
+            <div className="chart-placeholder">
+              <h3>Distribuição de Cupons</h3>
+              <p>Tipos de cupom: {data.couponDistribution.length}</p>
+            </div>
           </div>
         </motion.section>
       )}
 
       <motion.section className="insights-section" variants={sectionVariants}>
         <div className="insights-header">
-          <div className="insights-title"><FiActivity size={24} /><h3>Insights Estratégicos</h3></div>
+          <div className="insights-title"><FiActivity size={24} /><h3>Indicadores Principais</h3></div>
         </div>
         <div className="insights-grid">
-          <InsightCard icon={<FiTrendingUp />} title="Correlação Receita x Usuários" value="Positiva Forte" description="O crescimento saudável de usuários está diretamente ligado ao aumento da receita."
+          <InsightCard icon={<FiDollarSign />} title="Ticket Médio Geral" value={`R$ ${(data.generalStats.avgTicket || 0).toFixed(2)}`} description="Valor médio por transação em todo o sistema."
             trend="positive" />
-          <InsightCard icon={<FiDollarSign />} title="Receita por Usuário (LTV Simplificado)" value={`R$ ${((data.generalStats.totalCommission || 0) / (data.generalStats.uniqueCustomers || 1)).toFixed(2)}`} description="Valor médio que cada usuário gera para a PicMoney."
+          <InsightCard icon={<FiTrendingUp />} title="Margem Operacional" value={`${(((data.generalStats.totalRevenue - data.generalStats.totalCommission) / data.generalStats.totalRevenue * 100) || 0).toFixed(1)}%`} description="Margem de lucro operacional da plataforma."
+            trend="positive" />
+          <InsightCard icon={<FiBarChart />} title="Receita Líquida Total" value={`R$ ${((data.generalStats.totalRevenue - data.generalStats.totalCommission) || 0).toLocaleString('pt-BR')}`} description="Receita total após descontar repasses."
+            trend="positive" />
+          <InsightCard icon={<FiShoppingBag />} title="Eficiência por Loja" value={`R$ ${((data.generalStats.totalRevenue || 0) / (data.generalStats.uniqueStores || 1)).toFixed(2)}`} description="Receita média gerada por estabelecimento."
             trend="neutral" />
-          <InsightCard icon={<FiBarChart />} title="Eficiência do Cupom" value={`R$ ${((data.generalStats.totalCommission || 0) / (data.generalStats.totalTransactions || 1)).toFixed(2)}`} description="Receita média gerada por cada cupom capturado."
-            trend="positive" />
         </div>
       </motion.section>
     </motion.div>

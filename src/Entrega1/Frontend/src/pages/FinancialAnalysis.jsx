@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import {
   FiDollarSign,
   FiTrendingUp,
   FiPieChart,
-  FiBarChart3,
+  FiBarChart2,
   FiRefreshCw,
   FiPercent
 } from 'react-icons/fi';
@@ -31,39 +31,39 @@ const InsightCard = ({ icon, title, value, description, trend = "neutral" }) => 
   </motion.div>
 );
 
-const FinancialAnalysis = ({ filters }) => {
+const FinancialAnalysis = ({ filters, onError }) => {
   const [data, setData] = useState({
-    operatingMargin: null,
-    netRevenue: null
+    operatingMargin: { totalRevenue: 0, totalCosts: 0, operatingMargin: 0, monthlyData: [] },
+    netRevenue: { summary: { totalGrossRevenue: 0, totalCosts: 0, totalNetRevenue: 0, overallMargin: 0 }, byType: [] }
   });
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [hasInitialized, setHasInitialized] = useState(false);
 
-  const stableFilters = useMemo(() => filters, [JSON.stringify(filters)]);
-
-  const fetchData = useCallback(async (isRefresh = false) => {
+  const fetchData = useCallback(async (isRefresh = false, filtersToUse = filters) => {
     if (isRefresh) setRefreshing(true);
     else setLoading(true);
 
     try {
-      const timeout = new Promise((_, reject) =>
-        setTimeout(() => reject(new Error('Timeout')), 10000)
-      );
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 15000);
 
-      const dataPromise = Promise.all([
-        dashboardAPI.getOperatingMargin(stableFilters),
-        dashboardAPI.getNetRevenue(stableFilters)
+      const [operatingMargin, netRevenue] = await Promise.all([
+        dashboardAPI.getOperatingMargin(filtersToUse),
+        dashboardAPI.getNetRevenue(filtersToUse)
       ]);
 
-      const [operatingMargin, netRevenue] = await Promise.race([dataPromise, timeout]);
+      clearTimeout(timeoutId);
 
       setData({
-        operatingMargin,
-        netRevenue
+        operatingMargin: operatingMargin || { totalRevenue: 0, totalCosts: 0, operatingMargin: 0, monthlyData: [] },
+        netRevenue: netRevenue || { summary: { totalGrossRevenue: 0, totalCosts: 0, totalNetRevenue: 0, overallMargin: 0 }, byType: [] }
       });
     } catch (error) {
       console.error('Erro ao carregar dados financeiros:', error);
-      // Set empty data to prevent infinite loading
+      if (onError) {
+        onError(`Erro ao carregar dados financeiros: ${error.message}`);
+      }
       setData({
         operatingMargin: { totalRevenue: 0, totalCosts: 0, operatingMargin: 0, monthlyData: [] },
         netRevenue: { summary: { totalGrossRevenue: 0, totalCosts: 0, totalNetRevenue: 0, overallMargin: 0 }, byType: [] }
@@ -71,12 +71,23 @@ const FinancialAnalysis = ({ filters }) => {
     } finally {
       setLoading(false);
       setRefreshing(false);
+      setHasInitialized(true);
     }
-  }, [stableFilters]);
+  }, [onError]);
 
   useEffect(() => {
-    fetchData();
+    fetchData(false, filters);
   }, [fetchData]);
+
+  useEffect(() => {
+    if (hasInitialized) {
+      const timeoutId = setTimeout(() => {
+        fetchData(true, filters);
+      }, 500);
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [filters]);
 
   const handleRefresh = () => fetchData(true);
 
@@ -168,7 +179,7 @@ const FinancialAnalysis = ({ filters }) => {
           trend="positive"
         />
         <KPICard
-          icon={<FiBarChart3 />}
+          icon={<FiBarChart2 />}
           title="Margem Geral"
           value={`${netRevenue?.summary?.overallMargin?.toFixed(2) || '0'}%`}
           description="Margem líquida geral"
@@ -255,7 +266,7 @@ const FinancialAnalysis = ({ filters }) => {
           trend="neutral"
         />
         <InsightCard
-          icon={<FiBarChart3 />}
+          icon={<FiBarChart2 />}
           title="Eficiência Geral"
           value={`${((netRevenue?.summary?.totalNetRevenue / netRevenue?.summary?.totalGrossRevenue) * 100 || 0).toFixed(2)}%`}
           description="Percentual de receita líquida sobre bruta"

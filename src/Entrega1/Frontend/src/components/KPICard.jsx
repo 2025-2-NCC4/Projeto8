@@ -10,17 +10,22 @@ import {
   FiBarChart
 } from 'react-icons/fi';
 
-const KPICard = ({ 
-  title, 
-  value, 
-  change, 
-  changeType, 
-  icon, 
-  trend = [], 
+const KPICard = ({
+  title,
+  value,
+  change,
+  changeType,
+  icon,
+  trend = [],
   loading = false,
-  index = 0 
+  index = 0,
+  description
 }) => {
   const getIcon = () => {
+    if (React.isValidElement(icon)) {
+      return React.cloneElement(icon, { size: 24 });
+    }
+
     switch(icon) {
       case 'revenue': return <FiDollarSign size={24} />;
       case 'stores': return <FiShoppingCart size={24} />;
@@ -31,12 +36,12 @@ const KPICard = ({
   };
 
   const formatTrendData = () => {
-    if (!trend || trend.length === 0) return '';
-    
+    if (!trend || !Array.isArray(trend) || trend.length === 0) return '';
+
     const maxValue = Math.max(...trend);
     const minValue = Math.min(...trend);
     const range = maxValue - minValue || 1;
-    
+
     return trend.map((value, index) => {
       const x = (index / (trend.length - 1)) * 100;
       const y = ((maxValue - value) / range) * 100;
@@ -124,10 +129,16 @@ const KPICard = ({
           >
             {value}
           </motion.div>
-          <div className={`kpi-change ${changeType}`}>
-            {changeType === 'positive' ? <FiTrendingUp size={16} /> : <FiTrendingDown size={16} />}
-            <span>{change}</span>
-          </div>
+          {change && changeType ? (
+            <div className={`kpi-change ${changeType}`}>
+              {changeType === 'positive' ? <FiTrendingUp size={16} /> : <FiTrendingDown size={16} />}
+              <span>{change}</span>
+            </div>
+          ) : description ? (
+            <div className={`kpi-description ${typeof trend === 'string' ? trend : 'neutral'}`}>
+              <span>{description}</span>
+            </div>
+          ) : null}
         </div>
         
         <motion.div 
@@ -139,7 +150,7 @@ const KPICard = ({
       </div>
 
       {}
-      {trend.length > 0 && (
+      {Array.isArray(trend) && trend.length > 0 && (
         <div className="kpi-trend">
           <svg viewBox="0 0 100 30" className="trend-svg">
             <defs>

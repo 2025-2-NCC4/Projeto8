@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import {
   FiCheckCircle,
@@ -29,41 +29,41 @@ const StatusBadge = ({ status, count }) => (
   </div>
 );
 
-const ValidationScreen = ({ filters }) => {
+const ValidationScreen = ({ filters, onError }) => {
   const [data, setData] = useState({
     couponSummary: [],
     payoutTracking: []
   });
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [hasInitialized, setHasInitialized] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState('all');
   const [selectedMonth, setSelectedMonth] = useState('all');
 
-  const stableFilters = useMemo(() => filters, [JSON.stringify(filters)]);
-
-  const fetchData = useCallback(async (isRefresh = false) => {
+  const fetchData = useCallback(async (isRefresh = false, filtersToUse = filters) => {
     if (isRefresh) setRefreshing(true);
     else setLoading(true);
 
     try {
-      const timeout = new Promise((_, reject) =>
-        setTimeout(() => reject(new Error('Timeout')), 10000)
-      );
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 15000);
 
-      const dataPromise = Promise.all([
-        dashboardAPI.getCouponSummary(stableFilters),
-        dashboardAPI.getPayoutTracking(stableFilters)
+      const [couponSummary, payoutTracking] = await Promise.all([
+        dashboardAPI.getCouponSummary(filtersToUse),
+        dashboardAPI.getPayoutTracking(filtersToUse)
       ]);
 
-      const [couponSummary, payoutTracking] = await Promise.race([dataPromise, timeout]);
+      clearTimeout(timeoutId);
 
       setData({
-        couponSummary,
-        payoutTracking
+        couponSummary: couponSummary || [],
+        payoutTracking: payoutTracking || []
       });
     } catch (error) {
       console.error('Erro ao carregar dados de validação:', error);
-      // Set empty data to prevent infinite loading
+      if (onError) {
+        onError(`Erro ao carregar dados de validação: ${error.message}`);
+      }
       setData({
         couponSummary: [],
         payoutTracking: []
@@ -71,12 +71,23 @@ const ValidationScreen = ({ filters }) => {
     } finally {
       setLoading(false);
       setRefreshing(false);
+      setHasInitialized(true);
     }
-  }, [stableFilters]);
+  }, [onError]);
 
   useEffect(() => {
-    fetchData();
+    fetchData(false, filters);
   }, [fetchData]);
+
+  useEffect(() => {
+    if (hasInitialized) {
+      const timeoutId = setTimeout(() => {
+        fetchData(true, filters);
+      }, 500);
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [filters]);
 
   const handleRefresh = () => fetchData(true);
 

@@ -12,7 +12,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3002;
 
 app.use(helmet());
 app.use(compression());
@@ -193,13 +193,13 @@ app.get('/api/general-stats', (req, res) => {
 app.get('/api/transactions-over-time', (req, res) => {
   try {
     const filteredTransactions = applyFilters(cachedData.transacoes, req.query);
-    
+
     const groupedByDate = filteredTransactions.reduce((acc, transaction) => {
       const date = transaction.data;
       if (!acc[date]) {
-        acc[date] = { 
-          data: date, 
-          transacoes: 0, 
+        acc[date] = {
+          data: date,
+          transacoes: 0,
           valor: 0,
           receita_picmoney: 0,
           usuarios_ativos: new Set()
@@ -211,16 +211,17 @@ app.get('/api/transactions-over-time', (req, res) => {
       acc[date].usuarios_ativos.add(transaction.celular);
       return acc;
     }, {});
-    
+
     const result = Object.values(groupedByDate)
       .sort((a, b) => new Date(a.data) - new Date(b.data))
-      .map(item => ({ 
-        ...item, 
+      .slice(0, 100) // Limit to last 100 days
+      .map(item => ({
+        ...item,
         valor: Math.round(item.valor * 100) / 100,
         receita_picmoney: Math.round(item.receita_picmoney * 100) / 100,
         usuarios_ativos: item.usuarios_ativos.size
       }));
-    
+
     res.json(result);
   } catch (error) {
     console.error('Erro em transactions-over-time:', error);
@@ -231,23 +232,25 @@ app.get('/api/transactions-over-time', (req, res) => {
 app.get('/api/geographic/pedestres-heatmap', (req, res) => {
   try {
     const { show_penetracao } = req.query;
-    
+
     let pedestresData = cachedData.pedestres;
-    
+
     if (show_penetracao === 'true') {
       pedestresData = pedestresData.filter(p => p.possui_app_picmoney === 'True');
     }
-    
-    const heatmapData = pedestresData.map(p => ({
-      latitude: parseFloat(p.latitude),
-      longitude: parseFloat(p.longitude),
-      peso: 1,
-      local: p.local,
-      possui_app: p.possui_app_picmoney === 'True',
-      data: p.data,
-      horario: p.horario
-    })).filter(p => !isNaN(p.latitude) && !isNaN(p.longitude));
-    
+
+    const heatmapData = pedestresData
+      .slice(0, 5000) // Limit to 5000 points for performance
+      .map(p => ({
+        latitude: parseFloat(p.latitude),
+        longitude: parseFloat(p.longitude),
+        peso: 1,
+        local: p.local,
+        possui_app: p.possui_app_picmoney === 'True',
+        data: p.data,
+        horario: p.horario
+      })).filter(p => !isNaN(p.latitude) && !isNaN(p.longitude));
+
     res.json(heatmapData);
   } catch (error) {
     console.error('Erro em pedestres-heatmap:', error);
@@ -442,11 +445,13 @@ app.get('/api/revenue-by-region', (req, res) => {
 app.get('/api/customer-segments', (req, res) => {
   try {
     const filteredTransactions = applyFilters(cachedData.transacoes, req.query);
-    const segments = filteredTransactions.map(t => ({
-      age: parseInt(t.idade, 10) || 0,
-      avgTicket: parseFloat(t.valor_cupom) || 0,
-      gender: t.sexo || 'Não informado'
-    }));
+    const segments = filteredTransactions
+      .slice(0, 1000) // Limit for performance
+      .map(t => ({
+        age: parseInt(t.idade, 10) || 0,
+        avgTicket: parseFloat(t.valor_cupom) || 0,
+        gender: t.sexo || 'Não informado'
+      }));
     res.json(segments);
   } catch (error) {
     console.error('Erro em customer-segments:', error);
@@ -459,8 +464,10 @@ app.get('/api/time-distribution', (req, res) => {
     const filteredTransactions = applyFilters(cachedData.transacoes, req.query);
     const timeDistribution = filteredTransactions.reduce((acc, t) => {
       try {
-        const hour = getHours(parseISO(t.data_transacao));
-        acc[hour] = (acc[hour] || 0) + 1;
+        const hour = parseInt(t.hora?.split(':')[0] || '0', 10);
+        if (!isNaN(hour)) {
+          acc[hour] = (acc[hour] || 0) + 1;
+        }
       } catch (e) {}
       return acc;
     }, {});
@@ -907,6 +914,19 @@ app.get('/api/status', (req, res) => {
   });
 });
 
+app.get('/api', (req, res) => {
+  const routes = app._router.stack
+    .filter(r => r.route && r.route.path && r.route.path.startsWith('/api/'))
+    .map(r => ({
+      path: r.route.path,
+      methods: Object.keys(r.route.methods).join(', ').toUpperCase()
+    }));
+  res.json({
+    message: 'Bem-vindo à API PicMoneyDash! Estes são os endpoints disponíveis:',
+    endpoints: routes
+  });
+});
+
 app.use((error, req, res, next) => {
   console.error('Erro não tratado:', error);
   res.status(500).json({ error: 'Erro interno do servidor' });
@@ -918,11 +938,27 @@ app.use('*', (req, res) => {
 
 async function startServer() {
   await initializeData();
-  
-  app.listen(PORT, () => {
-    console.log(`🚀 Servidor rodando na porta ${PORT}`);
-    console.log(`📊 Dashboard API disponível em http://localhost:${PORT}/api`);
-  });
+
+  const startPort = PORT;
+  let server;
+
+  const tryListen = (port) => {
+    server = app.listen(port, () => {
+      console.log(`🚀 Servidor rodando na porta ${port}`);
+      console.log(`✅ Rota de status disponível em http://localhost:${port}/api/status`);
+      console.log(`✅ Rota principal da API em http://localhost:${port}/api`);
+    }).on('error', (err) => {
+      if (err.code === 'EADDRINUSE') {
+        console.log(`❌ Porta ${port} já está em uso. Tentando a próxima...`);
+        tryListen(port + 1);
+      } else {
+        console.error('❌ Erro ao iniciar servidor:', err);
+        process.exit(1);
+      }
+    });
+  };
+
+  tryListen(startPort);
 }
 
 startServer().catch(error => {
