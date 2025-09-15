@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3003/api';
+const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3002/api';
 
 const api = axios.create({
   baseURL: BASE_URL,
@@ -176,7 +176,6 @@ export const dashboardAPI = {
     }
   },
 
-  // Coupon Performance APIs
   async getCouponPerformanceByType(filters = {}) {
     try {
       const response = await api.get('/coupons/performance-by-type', { params: filters });
@@ -197,7 +196,6 @@ export const dashboardAPI = {
     }
   },
 
-  // Temporal Analysis APIs
   async getDailyParticipation(filters = {}) {
     try {
       const response = await api.get('/temporal/daily-participation', { params: filters });
@@ -218,7 +216,6 @@ export const dashboardAPI = {
     }
   },
 
-  // Enhanced Categories APIs
   async getCategoriesDetailedAnalysis(filters = {}) {
     try {
       const response = await api.get('/categories/detailed-analysis', { params: filters });
@@ -229,7 +226,6 @@ export const dashboardAPI = {
     }
   },
 
-  // Validation and Payout APIs
   async getCouponSummary(filters = {}) {
     try {
       const response = await api.get('/validation/coupon-summary', { params: filters });
