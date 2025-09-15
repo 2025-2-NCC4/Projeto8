@@ -15,6 +15,7 @@ import {
   DistributionChart,
   NetRevenueChart
 } from '../components/ChartContainer';
+import OperatingMarginChart from '../components/OperatingMarginChart';
 import './FinancialAnalysis.css';
 
 const InsightCard = ({ icon, title, value, description, trend = "neutral" }) => (
@@ -194,22 +195,39 @@ const FinancialAnalysis = ({ filters, onError }) => {
           <h2>Evolução da Margem Operacional</h2>
           <p>Análise mensal de receita, custos e margem operacional - {operatingMargin?.operatingMargin?.toFixed(2) || '0'}%</p>
         </div>
+        <div className="chart-container">
+          <OperatingMarginChart
+            data={monthlyMarginData}
+            title="Evolução da Margem Operacional"
+          />
+        </div>
         <div style={{
-          padding: '2rem',
+          padding: '2rem 1rem',
           textAlign: 'center',
           backgroundColor: 'var(--card-background)',
-          borderRadius: '1rem',
-          border: '1px solid var(--border-color)'
+          borderRadius: '0 0 1rem 1rem',
+          border: '1px solid var(--border-color)',
+          borderTop: 'none',
+          minHeight: '120px'
         }}>
-          <h3>Margem Operacional: {operatingMargin?.operatingMargin?.toFixed(2) || '0'}%</h3>
-          <div style={{ display: 'flex', justifyContent: 'space-around', marginTop: '1rem' }}>
-            <div>
-              <h4>Receita Total</h4>
+          <div style={{
+            display: 'flex',
+            justifyContent: 'space-around',
+            alignItems: 'center',
+            height: '100%',
+            gap: '1rem'
+          }}>
+            <div style={{ flex: 1 }}>
+              <h4 style={{ marginBottom: '1rem' }}>Receita Total</h4>
               <p>R$ {operatingMargin?.totalRevenue?.toLocaleString() || '0'}</p>
             </div>
-            <div>
-              <h4>Custos Totais</h4>
+            <div style={{ flex: 1 }}>
+              <h4 style={{ marginBottom: '1rem' }}>Custos Totais</h4>
               <p>R$ {operatingMargin?.totalCosts?.toLocaleString() || '0'}</p>
+            </div>
+            <div style={{ flex: 1 }}>
+              <h4 style={{ marginBottom: '1rem' }}>Margem Média</h4>
+              <p>{operatingMargin?.operatingMargin?.toFixed(2) || '0'}%</p>
             </div>
           </div>
         </div>
