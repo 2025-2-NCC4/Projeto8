@@ -12,7 +12,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3002;
 
 app.use(helmet());
 app.use(compression());
@@ -193,13 +193,13 @@ app.get('/api/general-stats', (req, res) => {
 app.get('/api/transactions-over-time', (req, res) => {
   try {
     const filteredTransactions = applyFilters(cachedData.transacoes, req.query);
-    
+
     const groupedByDate = filteredTransactions.reduce((acc, transaction) => {
       const date = transaction.data;
       if (!acc[date]) {
-        acc[date] = { 
-          data: date, 
-          transacoes: 0, 
+        acc[date] = {
+          data: date,
+          transacoes: 0,
           valor: 0,
           receita_picmoney: 0,
           usuarios_ativos: new Set()
@@ -211,16 +211,17 @@ app.get('/api/transactions-over-time', (req, res) => {
       acc[date].usuarios_ativos.add(transaction.celular);
       return acc;
     }, {});
-    
+
     const result = Object.values(groupedByDate)
       .sort((a, b) => new Date(a.data) - new Date(b.data))
-      .map(item => ({ 
-        ...item, 
+      .slice(0, 100) // Limit to last 100 days
+      .map(item => ({
+        ...item,
         valor: Math.round(item.valor * 100) / 100,
         receita_picmoney: Math.round(item.receita_picmoney * 100) / 100,
         usuarios_ativos: item.usuarios_ativos.size
       }));
-    
+
     res.json(result);
   } catch (error) {
     console.error('Erro em transactions-over-time:', error);
@@ -231,23 +232,25 @@ app.get('/api/transactions-over-time', (req, res) => {
 app.get('/api/geographic/pedestres-heatmap', (req, res) => {
   try {
     const { show_penetracao } = req.query;
-    
+
     let pedestresData = cachedData.pedestres;
-    
+
     if (show_penetracao === 'true') {
       pedestresData = pedestresData.filter(p => p.possui_app_picmoney === 'True');
     }
-    
-    const heatmapData = pedestresData.map(p => ({
-      latitude: parseFloat(p.latitude),
-      longitude: parseFloat(p.longitude),
-      peso: 1,
-      local: p.local,
-      possui_app: p.possui_app_picmoney === 'True',
-      data: p.data,
-      horario: p.horario
-    })).filter(p => !isNaN(p.latitude) && !isNaN(p.longitude));
-    
+
+    const heatmapData = pedestresData
+      .slice(0, 5000) // Limit to 5000 points for performance
+      .map(p => ({
+        latitude: parseFloat(p.latitude),
+        longitude: parseFloat(p.longitude),
+        peso: 1,
+        local: p.local,
+        possui_app: p.possui_app_picmoney === 'True',
+        data: p.data,
+        horario: p.horario
+      })).filter(p => !isNaN(p.latitude) && !isNaN(p.longitude));
+
     res.json(heatmapData);
   } catch (error) {
     console.error('Erro em pedestres-heatmap:', error);
@@ -442,11 +445,13 @@ app.get('/api/revenue-by-region', (req, res) => {
 app.get('/api/customer-segments', (req, res) => {
   try {
     const filteredTransactions = applyFilters(cachedData.transacoes, req.query);
-    const segments = filteredTransactions.map(t => ({
-      age: parseInt(t.idade, 10) || 0,
-      avgTicket: parseFloat(t.valor_cupom) || 0,
-      gender: t.sexo || 'Não informado'
-    }));
+    const segments = filteredTransactions
+      .slice(0, 1000) // Limit for performance
+      .map(t => ({
+        age: parseInt(t.idade, 10) || 0,
+        avgTicket: parseFloat(t.valor_cupom) || 0,
+        gender: t.sexo || 'Não informado'
+      }));
     res.json(segments);
   } catch (error) {
     console.error('Erro em customer-segments:', error);
@@ -459,8 +464,10 @@ app.get('/api/time-distribution', (req, res) => {
     const filteredTransactions = applyFilters(cachedData.transacoes, req.query);
     const timeDistribution = filteredTransactions.reduce((acc, t) => {
       try {
-        const hour = getHours(parseISO(t.data_transacao));
-        acc[hour] = (acc[hour] || 0) + 1;
+        const hour = parseInt(t.hora?.split(':')[0] || '0', 10);
+        if (!isNaN(hour)) {
+          acc[hour] = (acc[hour] || 0) + 1;
+        }
       } catch (e) {}
       return acc;
     }, {});
@@ -490,6 +497,408 @@ app.get('/api/filter-options', (req, res) => {
   }
 });
 
+// Financial Analysis Endpoints
+app.get('/api/financial/operating-margin', (req, res) => {
+  try {
+    const filteredTransactions = applyFilters(cachedData.transacoes, req.query);
+
+    const totalRevenue = filteredTransactions.reduce((sum, t) => sum + parseFloat(t.valor_cupom || 0), 0);
+    const totalCosts = filteredTransactions.reduce((sum, t) => sum + parseFloat(t.repasse_picmoney || 0), 0);
+    const operatingMargin = totalRevenue > 0 ? ((totalRevenue - totalCosts) / totalRevenue) * 100 : 0;
+
+    // Monthly breakdown
+    const monthlyData = filteredTransactions.reduce((acc, transaction) => {
+      const month = transaction.data.substring(0, 7); // YYYY-MM
+      if (!acc[month]) {
+        acc[month] = { revenue: 0, costs: 0, transactions: 0 };
+      }
+      acc[month].revenue += parseFloat(transaction.valor_cupom || 0);
+      acc[month].costs += parseFloat(transaction.repasse_picmoney || 0);
+      acc[month].transactions += 1;
+      return acc;
+    }, {});
+
+    const monthlyMargins = Object.keys(monthlyData).map(month => ({
+      month,
+      revenue: Math.round(monthlyData[month].revenue * 100) / 100,
+      costs: Math.round(monthlyData[month].costs * 100) / 100,
+      margin: monthlyData[month].revenue > 0 ?
+        Math.round(((monthlyData[month].revenue - monthlyData[month].costs) / monthlyData[month].revenue) * 10000) / 100 : 0,
+      transactions: monthlyData[month].transactions
+    })).sort((a, b) => a.month.localeCompare(b.month));
+
+    res.json({
+      totalRevenue: Math.round(totalRevenue * 100) / 100,
+      totalCosts: Math.round(totalCosts * 100) / 100,
+      operatingMargin: Math.round(operatingMargin * 100) / 100,
+      monthlyData: monthlyMargins
+    });
+  } catch (error) {
+    console.error('Erro em operating-margin:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
+
+app.get('/api/financial/net-revenue', (req, res) => {
+  try {
+    const filteredTransactions = applyFilters(cachedData.transacoes, req.query);
+
+    const revenueByType = filteredTransactions.reduce((acc, transaction) => {
+      const type = transaction.tipo_cupom || 'Não informado';
+      if (!acc[type]) {
+        acc[type] = { gross: 0, costs: 0, transactions: 0 };
+      }
+      acc[type].gross += parseFloat(transaction.valor_cupom || 0);
+      acc[type].costs += parseFloat(transaction.repasse_picmoney || 0);
+      acc[type].transactions += 1;
+      return acc;
+    }, {});
+
+    const netRevenueData = Object.keys(revenueByType).map(type => ({
+      type,
+      grossRevenue: Math.round(revenueByType[type].gross * 100) / 100,
+      costs: Math.round(revenueByType[type].costs * 100) / 100,
+      netRevenue: Math.round((revenueByType[type].gross - revenueByType[type].costs) * 100) / 100,
+      transactions: revenueByType[type].transactions,
+      margin: revenueByType[type].gross > 0 ?
+        Math.round(((revenueByType[type].gross - revenueByType[type].costs) / revenueByType[type].gross) * 10000) / 100 : 0
+    })).sort((a, b) => b.netRevenue - a.netRevenue);
+
+    const totalGross = filteredTransactions.reduce((sum, t) => sum + parseFloat(t.valor_cupom || 0), 0);
+    const totalCosts = filteredTransactions.reduce((sum, t) => sum + parseFloat(t.repasse_picmoney || 0), 0);
+    const totalNet = totalGross - totalCosts;
+
+    res.json({
+      summary: {
+        totalGrossRevenue: Math.round(totalGross * 100) / 100,
+        totalCosts: Math.round(totalCosts * 100) / 100,
+        totalNetRevenue: Math.round(totalNet * 100) / 100,
+        overallMargin: totalGross > 0 ? Math.round((totalNet / totalGross) * 10000) / 100 : 0
+      },
+      byType: netRevenueData
+    });
+  } catch (error) {
+    console.error('Erro em net-revenue:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
+
+// Coupon Performance Analysis Endpoints
+app.get('/api/coupons/performance-by-type', (req, res) => {
+  try {
+    const filteredTransactions = applyFilters(cachedData.transacoes, req.query);
+
+    const performanceByType = filteredTransactions.reduce((acc, transaction) => {
+      const type = transaction.tipo_cupom || 'Não informado';
+      if (!acc[type]) {
+        acc[type] = {
+          totalValue: 0,
+          totalTransactions: 0,
+          totalCommission: 0,
+          uniqueCustomers: new Set(),
+          uniqueStores: new Set()
+        };
+      }
+      acc[type].totalValue += parseFloat(transaction.valor_cupom || 0);
+      acc[type].totalTransactions += 1;
+      acc[type].totalCommission += parseFloat(transaction.repasse_picmoney || 0);
+      acc[type].uniqueCustomers.add(transaction.celular);
+      acc[type].uniqueStores.add(transaction.nome_estabelecimento);
+      return acc;
+    }, {});
+
+    const performanceData = Object.keys(performanceByType).map(type => {
+      const data = performanceByType[type];
+      return {
+        type,
+        totalValue: Math.round(data.totalValue * 100) / 100,
+        totalTransactions: data.totalTransactions,
+        avgTicket: Math.round((data.totalValue / data.totalTransactions) * 100) / 100,
+        totalCommission: Math.round(data.totalCommission * 100) / 100,
+        commissionRate: data.totalValue > 0 ?
+          Math.round((data.totalCommission / data.totalValue) * 10000) / 100 : 0,
+        uniqueCustomers: data.uniqueCustomers.size,
+        uniqueStores: data.uniqueStores.size,
+        efficiency: data.totalTransactions > 0 ?
+          Math.round((data.totalValue / data.totalTransactions) * 100) / 100 : 0
+      };
+    }).sort((a, b) => b.totalValue - a.totalValue);
+
+    res.json(performanceData);
+  } catch (error) {
+    console.error('Erro em performance-by-type:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
+
+app.get('/api/coupons/usage-trends', (req, res) => {
+  try {
+    const filteredTransactions = applyFilters(cachedData.transacoes, req.query);
+
+    const dailyUsage = filteredTransactions.reduce((acc, transaction) => {
+      const date = transaction.data;
+      const type = transaction.tipo_cupom || 'Não informado';
+
+      if (!acc[date]) {
+        acc[date] = {};
+      }
+      if (!acc[date][type]) {
+        acc[date][type] = { count: 0, value: 0 };
+      }
+
+      acc[date][type].count += 1;
+      acc[date][type].value += parseFloat(transaction.valor_cupom || 0);
+      return acc;
+    }, {});
+
+    const trendData = Object.keys(dailyUsage).sort().map(date => {
+      const dayData = { date };
+      const types = Object.keys(dailyUsage[date]);
+
+      types.forEach(type => {
+        dayData[`${type}_count`] = dailyUsage[date][type].count;
+        dayData[`${type}_value`] = Math.round(dailyUsage[date][type].value * 100) / 100;
+      });
+
+      return dayData;
+    });
+
+    res.json(trendData);
+  } catch (error) {
+    console.error('Erro em usage-trends:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
+
+// Temporal Analysis Endpoints
+app.get('/api/temporal/daily-participation', (req, res) => {
+  try {
+    const filteredTransactions = applyFilters(cachedData.transacoes, req.query);
+
+    const dailyStats = filteredTransactions.reduce((acc, transaction) => {
+      const date = transaction.data;
+      if (!acc[date]) {
+        acc[date] = {
+          totalTransactions: 0,
+          totalValue: 0,
+          uniqueCustomers: new Set(),
+          uniqueStores: new Set()
+        };
+      }
+      acc[date].totalTransactions += 1;
+      acc[date].totalValue += parseFloat(transaction.valor_cupom || 0);
+      acc[date].uniqueCustomers.add(transaction.celular);
+      acc[date].uniqueStores.add(transaction.nome_estabelecimento);
+      return acc;
+    }, {});
+
+    const participationData = Object.keys(dailyStats).sort().map(date => ({
+      date,
+      transactions: dailyStats[date].totalTransactions,
+      revenue: Math.round(dailyStats[date].totalValue * 100) / 100,
+      avgTicket: Math.round((dailyStats[date].totalValue / dailyStats[date].totalTransactions) * 100) / 100,
+      uniqueCustomers: dailyStats[date].uniqueCustomers.size,
+      uniqueStores: dailyStats[date].uniqueStores.size,
+      participationRate: Math.round((dailyStats[date].uniqueCustomers.size / dailyStats[date].totalTransactions) * 10000) / 100
+    }));
+
+    res.json(participationData);
+  } catch (error) {
+    console.error('Erro em daily-participation:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
+
+app.get('/api/temporal/period-distribution', (req, res) => {
+  try {
+    const filteredTransactions = applyFilters(cachedData.transacoes, req.query);
+
+    const periodStats = filteredTransactions.reduce((acc, transaction) => {
+      const hour = parseInt(transaction.hora?.split(':')[0] || '0', 10);
+      let period;
+
+      if (hour >= 6 && hour < 12) period = 'Manhã';
+      else if (hour >= 12 && hour < 18) period = 'Tarde';
+      else if (hour >= 18 && hour < 24) period = 'Noite';
+      else period = 'Madrugada';
+
+      if (!acc[period]) {
+        acc[period] = {
+          transactions: 0,
+          value: 0,
+          customers: new Set()
+        };
+      }
+
+      acc[period].transactions += 1;
+      acc[period].value += parseFloat(transaction.valor_cupom || 0);
+      acc[period].customers.add(transaction.celular);
+      return acc;
+    }, {});
+
+    const distributionData = Object.keys(periodStats).map(period => ({
+      period,
+      transactions: periodStats[period].transactions,
+      revenue: Math.round(periodStats[period].value * 100) / 100,
+      avgTicket: Math.round((periodStats[period].value / periodStats[period].transactions) * 100) / 100,
+      uniqueCustomers: periodStats[period].customers.size,
+      percentage: Math.round((periodStats[period].transactions / filteredTransactions.length) * 10000) / 100
+    }));
+
+    res.json(distributionData);
+  } catch (error) {
+    console.error('Erro em period-distribution:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
+
+// Enhanced Categories Analysis
+app.get('/api/categories/detailed-analysis', (req, res) => {
+  try {
+    const filteredTransactions = applyFilters(cachedData.transacoes, req.query);
+
+    const totalRevenue = filteredTransactions.reduce((sum, t) => sum + parseFloat(t.valor_cupom || 0), 0);
+    const totalTransactions = filteredTransactions.length;
+
+    const categoryStats = filteredTransactions.reduce((acc, transaction) => {
+      const category = transaction.categoria_estabelecimento || 'Não informado';
+      if (!acc[category]) {
+        acc[category] = {
+          revenue: 0,
+          transactions: 0,
+          stores: new Set(),
+          customers: new Set(),
+          commission: 0
+        };
+      }
+
+      acc[category].revenue += parseFloat(transaction.valor_cupom || 0);
+      acc[category].transactions += 1;
+      acc[category].stores.add(transaction.nome_estabelecimento);
+      acc[category].customers.add(transaction.celular);
+      acc[category].commission += parseFloat(transaction.repasse_picmoney || 0);
+      return acc;
+    }, {});
+
+    const detailedAnalysis = Object.keys(categoryStats)
+      .map(category => {
+        const stats = categoryStats[category];
+        return {
+          category,
+          revenue: Math.round(stats.revenue * 100) / 100,
+          transactions: stats.transactions,
+          avgTicket: Math.round((stats.revenue / stats.transactions) * 100) / 100,
+          uniqueStores: stats.stores.size,
+          uniqueCustomers: stats.customers.size,
+          commission: Math.round(stats.commission * 100) / 100,
+          revenueParticipation: Math.round((stats.revenue / totalRevenue) * 10000) / 100,
+          transactionParticipation: Math.round((stats.transactions / totalTransactions) * 10000) / 100,
+          efficiency: Math.round((stats.revenue / stats.transactions) * 100) / 100
+        };
+      })
+      .sort((a, b) => b.revenue - a.revenue);
+
+    res.json(detailedAnalysis);
+  } catch (error) {
+    console.error('Erro em detailed-analysis:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
+
+// Validation and Payout Management Endpoints
+app.get('/api/validation/coupon-summary', (req, res) => {
+  try {
+    const filteredTransactions = applyFilters(cachedData.transacoes, req.query);
+
+    const summary = filteredTransactions.reduce((acc, transaction) => {
+      const type = transaction.tipo_cupom || 'Não informado';
+      const status = 'Validado'; // Assuming all transactions in CSV are validated
+
+      if (!acc[type]) {
+        acc[type] = {
+          total: 0,
+          validated: 0,
+          pending: 0,
+          revenue: 0,
+          payout: 0
+        };
+      }
+
+      acc[type].total += 1;
+      acc[type].validated += 1; // All are considered validated
+      acc[type].revenue += parseFloat(transaction.valor_cupom || 0);
+      acc[type].payout += parseFloat(transaction.repasse_picmoney || 0);
+      return acc;
+    }, {});
+
+    const validationData = Object.keys(summary).map(type => ({
+      type,
+      totalCoupons: summary[type].total,
+      validatedCoupons: summary[type].validated,
+      pendingCoupons: summary[type].pending,
+      validationRate: Math.round((summary[type].validated / summary[type].total) * 10000) / 100,
+      totalRevenue: Math.round(summary[type].revenue * 100) / 100,
+      totalPayout: Math.round(summary[type].payout * 100) / 100,
+      avgCouponValue: Math.round((summary[type].revenue / summary[type].total) * 100) / 100
+    })).sort((a, b) => b.totalRevenue - a.totalRevenue);
+
+    res.json(validationData);
+  } catch (error) {
+    console.error('Erro em coupon-summary:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
+
+app.get('/api/validation/payout-tracking', (req, res) => {
+  try {
+    const filteredTransactions = applyFilters(cachedData.transacoes, req.query);
+
+    const monthlyPayouts = filteredTransactions.reduce((acc, transaction) => {
+      const month = transaction.data.substring(0, 7); // YYYY-MM
+      const store = transaction.nome_estabelecimento || 'Não informado';
+
+      if (!acc[month]) {
+        acc[month] = {};
+      }
+      if (!acc[month][store]) {
+        acc[month][store] = {
+          totalPayout: 0,
+          transactions: 0,
+          revenue: 0
+        };
+      }
+
+      acc[month][store].totalPayout += parseFloat(transaction.repasse_picmoney || 0);
+      acc[month][store].transactions += 1;
+      acc[month][store].revenue += parseFloat(transaction.valor_cupom || 0);
+      return acc;
+    }, {});
+
+    const payoutData = [];
+    Object.keys(monthlyPayouts).sort().forEach(month => {
+      Object.keys(monthlyPayouts[month]).forEach(store => {
+        const data = monthlyPayouts[month][store];
+        payoutData.push({
+          month,
+          store,
+          totalPayout: Math.round(data.totalPayout * 100) / 100,
+          transactions: data.transactions,
+          revenue: Math.round(data.revenue * 100) / 100,
+          payoutRate: data.revenue > 0 ?
+            Math.round((data.totalPayout / data.revenue) * 10000) / 100 : 0,
+          avgPayoutPerTransaction: Math.round((data.totalPayout / data.transactions) * 100) / 100,
+          status: 'Pago' // Assuming all are paid
+        });
+      });
+    });
+
+    res.json(payoutData.sort((a, b) => b.totalPayout - a.totalPayout));
+  } catch (error) {
+    console.error('Erro em payout-tracking:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
+
 app.get('/api/status', (req, res) => {
   res.json({
     status: 'ok',
@@ -505,6 +914,19 @@ app.get('/api/status', (req, res) => {
   });
 });
 
+app.get('/api', (req, res) => {
+  const routes = app._router.stack
+    .filter(r => r.route && r.route.path && r.route.path.startsWith('/api/'))
+    .map(r => ({
+      path: r.route.path,
+      methods: Object.keys(r.route.methods).join(', ').toUpperCase()
+    }));
+  res.json({
+    message: 'Bem-vindo à API PicMoneyDash! Estes são os endpoints disponíveis:',
+    endpoints: routes
+  });
+});
+
 app.use((error, req, res, next) => {
   console.error('Erro não tratado:', error);
   res.status(500).json({ error: 'Erro interno do servidor' });
@@ -516,11 +938,27 @@ app.use('*', (req, res) => {
 
 async function startServer() {
   await initializeData();
-  
-  app.listen(PORT, () => {
-    console.log(`🚀 Servidor rodando na porta ${PORT}`);
-    console.log(`📊 Dashboard API disponível em http://localhost:${PORT}/api`);
-  });
+
+  const startPort = PORT;
+  let server;
+
+  const tryListen = (port) => {
+    server = app.listen(port, () => {
+      console.log(`🚀 Servidor rodando na porta ${port}`);
+      console.log(`✅ Rota de status disponível em http://localhost:${port}/api/status`);
+      console.log(`✅ Rota principal da API em http://localhost:${port}/api`);
+    }).on('error', (err) => {
+      if (err.code === 'EADDRINUSE') {
+        console.log(`❌ Porta ${port} já está em uso. Tentando a próxima...`);
+        tryListen(port + 1);
+      } else {
+        console.error('❌ Erro ao iniciar servidor:', err);
+        process.exit(1);
+      }
+    });
+  };
+
+  tryListen(startPort);
 }
 
 startServer().catch(error => {

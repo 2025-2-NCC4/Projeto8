@@ -1,5 +1,5 @@
 import React from 'react';
-import { BarChart3, Map, Users, Store } from 'lucide-react';
+import { BarChart3, Map, Users, Store, DollarSign, Tag, CheckSquare } from 'lucide-react';
 import './Navigation.css';
 
 const Navigation = ({ currentPage, onPageChange }) => {
@@ -9,6 +9,24 @@ const Navigation = ({ currentPage, onPageChange }) => {
       name: 'Dashboard',
       icon: <BarChart3 size={20} />,
       description: 'Visão Geral Estratégica'
+    },
+    {
+      id: 'financial',
+      name: 'Análise Financeira',
+      icon: <DollarSign size={20} />,
+      description: 'Margem e Receita Líquida'
+    },
+    {
+      id: 'coupons',
+      name: 'Análise de Cupons',
+      icon: <Tag size={20} />,
+      description: 'Performance por Tipo'
+    },
+    {
+      id: 'validation',
+      name: 'Central de Validação',
+      icon: <CheckSquare size={20} />,
+      description: 'Validação e Repasses'
     },
     {
       id: 'geographic',
@@ -33,7 +51,7 @@ const Navigation = ({ currentPage, onPageChange }) => {
   return (
     <nav className="dashboard-navigation">
       <div className="nav-header">
-        <h2>PicMoney</h2>
+        <h2>PIC Money</h2>
         <p>C-Level Dashboard</p>
       </div>
       
