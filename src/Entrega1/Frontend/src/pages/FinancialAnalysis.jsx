@@ -12,7 +12,8 @@ import { dashboardAPI } from '../services/api';
 import KPICard from '../components/KPICard';
 import {
   CategoryChart,
-  DistributionChart
+  DistributionChart,
+  NetRevenueChart
 } from '../components/ChartContainer';
 import './FinancialAnalysis.css';
 
@@ -217,27 +218,20 @@ const FinancialAnalysis = ({ filters, onError }) => {
       {/* Net Revenue by Type */}
       <motion.div className="charts-row" variants={sectionVariants}>
         <div className="chart-container-half">
-          <div className="chart-header">
-            <h3>Receita Líquida por Tipo</h3>
-            <p>Comparação de receita líquida entre tipos de cupom</p>
-          </div>
-          <CategoryChart
+          <NetRevenueChart
             data={netRevenueChartData}
-            dataKey="value"
-            nameKey="name"
-            color="#3b82f6"
-            height={300}
+            title="Receita Líquida por Tipo"
+            loading={loading}
           />
         </div>
 
         <div className="chart-container-half">
-          <div className="chart-header">
-            <h3>Distribuição de Margem</h3>
-            <p>Margem percentual por tipo de cupom</p>
-          </div>
           <DistributionChart
             data={marginDistributionData}
-            height={300}
+            title="Distribuição de Margem"
+            dataKey="value"
+            nameKey="name"
+            loading={loading}
           />
         </div>
       </motion.div>

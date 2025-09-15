@@ -19,14 +19,14 @@ const FilterPanel = ({ filters, onFiltersChange, isOpen, onToggle }) => {
   useEffect(() => {
 
     const active = [];
-    if (filters.startDate || filters.endDate) active.push('Date Range');
-    if (filters.categoria) active.push(`Category: ${filters.categoria}`);
-    if (filters.bairro) active.push(`Location: ${filters.bairro}`);
-    if (filters.tipoCupom) active.push(`Coupon: ${filters.tipoCupom}`);
-    if (filters.ageRange) active.push(`Age: ${filters.ageRange}`);
-    if (filters.gender) active.push(`Gender: ${filters.gender}`);
-    if (filters.minValue || filters.maxValue) active.push('Value Range');
-    
+    if (filters.startDate || filters.endDate) active.push('Período');
+    if (filters.categoria) active.push(`Categoria: ${filters.categoria}`);
+    if (filters.bairro) active.push(`Local: ${filters.bairro}`);
+    if (filters.tipoCupom) active.push(`Cupom: ${filters.tipoCupom}`);
+    if (filters.ageRange) active.push(`Idade: ${filters.ageRange}`);
+    if (filters.gender) active.push(`Gênero: ${filters.gender}`);
+    if (filters.minValue || filters.maxValue) active.push('Faixa de Valor');
+
     setActiveFilters(active);
   }, [filters]);
 
@@ -103,26 +103,26 @@ const FilterPanel = ({ filters, onFiltersChange, isOpen, onToggle }) => {
 
   const clearFilter = (filterType) => {
     switch(filterType) {
-      case 'Date Range':
+      case 'Período':
         handleFilterChange('startDate', '');
         handleFilterChange('endDate', '');
         break;
-      case 'Category':
+      case 'Categoria':
         handleFilterChange('categoria', '');
         break;
-      case 'Location':
+      case 'Local':
         handleFilterChange('bairro', '');
         break;
-      case 'Coupon':
+      case 'Cupom':
         handleFilterChange('tipoCupom', '');
         break;
-      case 'Age':
+      case 'Idade':
         handleFilterChange('ageRange', '');
         break;
-      case 'Gender':
+      case 'Gênero':
         handleFilterChange('gender', '');
         break;
-      case 'Value Range':
+      case 'Faixa de Valor':
         handleFilterChange('minValue', '');
         handleFilterChange('maxValue', '');
         break;
@@ -145,17 +145,17 @@ const FilterPanel = ({ filters, onFiltersChange, isOpen, onToggle }) => {
   })) || [];
 
   const ageOptions = [
-    { value: '18-24', label: '18-24 years' },
-    { value: '25-34', label: '25-34 years' },
-    { value: '35-44', label: '35-44 years' },
-    { value: '45-54', label: '45-54 years' },
-    { value: '55+', label: '55+ years' }
+    { value: '18-24', label: '18-24 anos' },
+    { value: '25-34', label: '25-34 anos' },
+    { value: '35-44', label: '35-44 anos' },
+    { value: '45-54', label: '45-54 anos' },
+    { value: '55+', label: '55+ anos' }
   ];
 
   const genderOptions = [
-    { value: 'Masculino', label: 'Male' },
-    { value: 'Feminino', label: 'Female' },
-    { value: 'Outro', label: 'Other' }
+    { value: 'Masculino', label: 'Masculino' },
+    { value: 'Feminino', label: 'Feminino' },
+    { value: 'Outro', label: 'Outro' }
   ];
 
   return (
@@ -168,7 +168,7 @@ const FilterPanel = ({ filters, onFiltersChange, isOpen, onToggle }) => {
         whileTap={{ scale: 0.95 }}
       >
         <FiFilter size={20} />
-        <span>Filters</span>
+        <span>Filtros</span>
         {activeFilters.length > 0 && (
           <motion.div 
             className="filter-badge"
@@ -202,7 +202,7 @@ const FilterPanel = ({ filters, onFiltersChange, isOpen, onToggle }) => {
               <div className="filter-header">
                 <div className="filter-title">
                   <FiFilter size={24} />
-                  <h3>Advanced Filters</h3>
+                  <h3>Filtros Avançados</h3>
                 </div>
                 <button className="filter-close" onClick={onToggle}>
                   <FiX size={24} />
@@ -214,12 +214,12 @@ const FilterPanel = ({ filters, onFiltersChange, isOpen, onToggle }) => {
                 {activeFilters.length > 0 && (
                   <div className="active-filters-section">
                     <div className="section-header">
-                      <span>Active Filters ({activeFilters.length})</span>
-                      <button 
+                      <span>Filtros Ativos ({activeFilters.length})</span>
+                      <button
                         className="clear-all-btn"
                         onClick={clearAllFilters}
                       >
-                        Clear All
+                        Limpar Todos
                       </button>
                     </div>
                     <div className="active-filters">
@@ -245,11 +245,11 @@ const FilterPanel = ({ filters, onFiltersChange, isOpen, onToggle }) => {
                 <div className="filter-section">
                   <div className="filter-section-title">
                     <FiCalendar size={18} />
-                    <span>Date Range</span>
+                    <span>Período</span>
                   </div>
                   <div className="date-range-inputs">
                     <div className="input-group">
-                      <label>Start Date</label>
+                      <label>Data Inicial</label>
                       <input
                         type="date"
                         value={filters.startDate}
@@ -258,7 +258,7 @@ const FilterPanel = ({ filters, onFiltersChange, isOpen, onToggle }) => {
                       />
                     </div>
                     <div className="input-group">
-                      <label>End Date</label>
+                      <label>Data Final</label>
                       <input
                         type="date"
                         value={filters.endDate}
@@ -273,13 +273,13 @@ const FilterPanel = ({ filters, onFiltersChange, isOpen, onToggle }) => {
                 <div className="filter-section">
                   <div className="filter-section-title">
                     <FiTag size={18} />
-                    <span>Category</span>
+                    <span>Categoria</span>
                   </div>
                   <Select
                     options={categoryOptions}
                     value={categoryOptions.find(opt => opt.value === filters.categoria)}
                     onChange={(selected) => handleFilterChange('categoria', selected?.value || '')}
-                    placeholder="Select category..."
+                    placeholder="Selecione uma categoria..."
                     isClearable
                     styles={customSelectStyles}
                     className="filter-select"
@@ -290,13 +290,13 @@ const FilterPanel = ({ filters, onFiltersChange, isOpen, onToggle }) => {
                 <div className="filter-section">
                   <div className="filter-section-title">
                     <FiMapPin size={18} />
-                    <span>Location</span>
+                    <span>Localização</span>
                   </div>
                   <Select
                     options={locationOptions}
                     value={locationOptions.find(opt => opt.value === filters.bairro)}
                     onChange={(selected) => handleFilterChange('bairro', selected?.value || '')}
-                    placeholder="Select location..."
+                    placeholder="Selecione uma localização..."
                     isClearable
                     styles={customSelectStyles}
                     className="filter-select"
@@ -307,13 +307,13 @@ const FilterPanel = ({ filters, onFiltersChange, isOpen, onToggle }) => {
                 <div className="filter-section">
                   <div className="filter-section-title">
                     <FiTag size={18} />
-                    <span>Coupon Type</span>
+                    <span>Tipo de Cupom</span>
                   </div>
                   <Select
                     options={couponOptions}
                     value={couponOptions.find(opt => opt.value === filters.tipoCupom)}
                     onChange={(selected) => handleFilterChange('tipoCupom', selected?.value || '')}
-                    placeholder="Select coupon type..."
+                    placeholder="Selecione um tipo de cupom..."
                     isClearable
                     styles={customSelectStyles}
                     className="filter-select"
@@ -324,28 +324,28 @@ const FilterPanel = ({ filters, onFiltersChange, isOpen, onToggle }) => {
                 <div className="filter-section">
                   <div className="filter-section-title">
                     <FiUsers size={18} />
-                    <span>Demographics</span>
+                    <span>Demografia</span>
                   </div>
                   <div className="demographics-filters">
                     <div className="input-group">
-                      <label>Age Range</label>
+                      <label>Faixa Etária</label>
                       <Select
                         options={ageOptions}
                         value={ageOptions.find(opt => opt.value === filters.ageRange)}
                         onChange={(selected) => handleFilterChange('ageRange', selected?.value || '')}
-                        placeholder="Select age range..."
+                        placeholder="Selecione uma faixa etária..."
                         isClearable
                         styles={customSelectStyles}
                         className="filter-select"
                       />
                     </div>
                     <div className="input-group">
-                      <label>Gender</label>
+                      <label>Gênero</label>
                       <Select
                         options={genderOptions}
                         value={genderOptions.find(opt => opt.value === filters.gender)}
                         onChange={(selected) => handleFilterChange('gender', selected?.value || '')}
-                        placeholder="Select gender..."
+                        placeholder="Selecione um gênero..."
                         isClearable
                         styles={customSelectStyles}
                         className="filter-select"
@@ -358,28 +358,28 @@ const FilterPanel = ({ filters, onFiltersChange, isOpen, onToggle }) => {
                 <div className="filter-section">
                   <div className="filter-section-title">
                     <FiDollarSign size={18} />
-                    <span>Value Range</span>
+                    <span>Faixa de Valor</span>
                   </div>
                   <div className="value-range-inputs">
                     <div className="input-group">
-                      <label>Min Value (R$)</label>
+                      <label>Valor Mínimo (R$)</label>
                       <input
                         type="number"
                         value={filters.minValue}
                         onChange={(e) => handleFilterChange('minValue', e.target.value)}
-                        placeholder="0.00"
+                        placeholder="0,00"
                         className="filter-input"
                         min="0"
                         step="0.01"
                       />
                     </div>
                     <div className="input-group">
-                      <label>Max Value (R$)</label>
+                      <label>Valor Máximo (R$)</label>
                       <input
                         type="number"
                         value={filters.maxValue}
                         onChange={(e) => handleFilterChange('maxValue', e.target.value)}
-                        placeholder="1000.00"
+                        placeholder="1000,00"
                         className="filter-input"
                         min="0"
                         step="0.01"

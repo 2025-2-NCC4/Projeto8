@@ -14,7 +14,8 @@ import { dashboardAPI } from '../services/api';
 import KPICard from '../components/KPICard';
 import {
   CategoryChart,
-  DistributionChart
+  DistributionChart,
+  TemporalChart
 } from '../components/ChartContainer';
 import './CouponAnalysis.css';
 
@@ -245,11 +246,12 @@ const CouponAnalysis = ({ filters, onError }) => {
       {/* Daily Participation and Period Distribution */}
       <motion.div className="charts-row" variants={sectionVariants}>
         <div className="chart-container-half">
-          <div className="chart-header">
-            <h3>Análise Temporal</h3>
-            <p>Métricas de participação e performance temporal</p>
-          </div>
-          <div style={{ padding: '1rem' }}>
+          <TemporalChart
+            data={dailyChartData}
+            title="Análise Temporal"
+            loading={loading}
+          />
+          <div style={{ padding: '1rem', marginTop: '1rem' }}>
             <p><strong>Total de dias analisados:</strong> {dailyParticipation.length}</p>
             <p><strong>Taxa média de participação:</strong> {dailyParticipation.length > 0 ?
               (dailyParticipation.reduce((sum, d) => sum + d.participationRate, 0) / dailyParticipation.length).toFixed(2) : 0}%</p>
