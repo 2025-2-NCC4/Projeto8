@@ -126,7 +126,9 @@ export const DualAxisChart = ({ data, loading, className }) => {
     }
 
     try {
-      const date = new Date(formattedDate);
+      // Fix timezone issue: add 'T12:00:00' to avoid UTC conversion problems
+      const dateWithTime = formattedDate.includes('T') ? formattedDate : `${formattedDate}T12:00:00`;
+      const date = new Date(dateWithTime);
       const formattedItem = {
         ...item,
         data: date.toLocaleDateString('pt-BR', {

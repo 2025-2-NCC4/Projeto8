@@ -267,6 +267,7 @@ const ValidationScreen = ({ filters, onError }) => {
             data={payoutStatusData}
             title="Status dos Repasses"
             dataKey="valor"
+            nameKey="tipo"
           />
         </div>
       </motion.div>
