@@ -2,6 +2,9 @@ import React, { useState, useEffect, createContext, useContext } from 'react';
 import { AlertTriangle } from 'lucide-react';
 import Navigation from './components/Navigation';
 import Dashboard from './pages/Dashboard';
+import FinancialAnalysis from './pages/FinancialAnalysis';
+import CouponAnalysis from './pages/CouponAnalysis';
+import ValidationScreen from './pages/ValidationScreen';
 import GeographicAnalysis from './pages/GeographicAnalysis';
 import UserAnalysis from './pages/UserAnalysis';
 import StoreAnalysis from './pages/StoreAnalysis';
@@ -56,18 +59,34 @@ const App = () => {
     setFilters(newFilters);
   };
 
+  const handleError = (errorMessage) => {
+    setError(errorMessage);
+    setTimeout(() => setError(null), 10000); // Limpa o erro após 10 segundos
+  };
+
   const renderCurrentPage = () => {
+    const pageProps = {
+      filters,
+      onError: handleError,
+    };
+
     switch (currentPage) {
       case 'dashboard':
-        return <Dashboard filters={filters} onFiltersChange={handleFiltersChange} />;
+        return <Dashboard {...pageProps} onFiltersChange={handleFiltersChange} />;
+      case 'financial':
+        return <FinancialAnalysis {...pageProps} />;
+      case 'coupons':
+        return <CouponAnalysis {...pageProps} />;
+      case 'validation':
+        return <ValidationScreen {...pageProps} />;
       case 'geographic':
-        return <GeographicAnalysis filters={filters} />;
+        return <GeographicAnalysis {...pageProps} />;
       case 'users':
-        return <UserAnalysis filters={filters} />;
+        return <UserAnalysis {...pageProps} />;
       case 'stores':
-        return <StoreAnalysis filters={filters} />;
+        return <StoreAnalysis {...pageProps} />;
       default:
-        return <Dashboard filters={filters} onFiltersChange={handleFiltersChange} />;
+        return <Dashboard {...pageProps} onFiltersChange={handleFiltersChange} />;
     }
   };
 

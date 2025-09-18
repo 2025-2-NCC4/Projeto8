@@ -108,20 +108,26 @@ const StoreMetrics = ({ data }) => {
   );
 };
 
-const CategoryPerformance = ({ data }) => {
-  const categoryData = useMemo(() => {
-    if (!data || data.length === 0) return [];
-    const categoryStats = data.reduce((acc, loja) => {
-      const cat = loja.categoria || 'Não Informada';
-      if (!acc[cat]) acc[cat] = { receita_total: 0, num_lojas: 0 };
-      acc[cat].receita_total += loja.receita_gerada || 0;
-      acc[cat].num_lojas++;
-      return acc;
-    }, {});
-    return Object.entries(categoryStats)
-      .map(([categoria, stats]) => ({ ...stats, categoria }))
-      .sort((a, b) => b.receita_total - a.receita_total).slice(0, 10);
-  }, [data]);
+const CategoryPerformance = ({ filters }) => {
+  const [categoryData, setCategoryData] = useState([]);
+
+  useEffect(() => {
+    const fetchCategoryData = async () => {
+      try {
+        const categories = await dashboardAPI.getTopCategories(filters);
+        const formattedData = categories.map(cat => ({
+          categoria: cat.categoria,
+          receita_total: cat.valor,
+          num_lojas: cat.transacoes // usando transações como proxy para número de lojas
+        }));
+        setCategoryData(formattedData);
+      } catch (err) {
+        console.error('Erro ao carregar categorias:', err);
+        setCategoryData([]);
+      }
+    };
+    fetchCategoryData();
+  }, [filters]);
 
   return (
     <div className="analysis-item category-performance">
@@ -253,7 +259,7 @@ const StoreAnalysis = ({ filters }) => {
       <PerformanceTable data={filteredAndSortedData} onSort={handleSort} sortConfig={sortConfig} />
 
       <div className="additional-analysis">
-        <CategoryPerformance data={storesData} />
+        <CategoryPerformance filters={filters} />
         <ScatterPlotAnalysis data={storesData} />
       </div>
     </motion.div>
