@@ -67,17 +67,10 @@ const Navigation = ({ currentPage, onPageChange }) => {
         <h2>PIC Money</h2>
         <p>C-Level Dashboard</p>
       </div>
-      
       <div className="nav-menu">
         {navItems.map(page => (
-          <button
-            key={page.id}
-            className={`nav-item ${currentPage === page.id ? 'active' : ''}`}
-            onClick={() => onPageChange(page.id)}
-          >
-            <div className="nav-icon">
-              {page.icon}
-            </div>
+          <button key={page.id} className={`nav-item ${currentPage === page.id ? 'active' : ''}`} onClick={() => onPageChange(page.id)}>
+            <div className="nav-icon">{page.icon}</div>
             <div className="nav-content">
               <span className="nav-title">{page.name}</span>
               <span className="nav-description">{page.description}</span>
@@ -87,6 +80,4 @@ const Navigation = ({ currentPage, onPageChange }) => {
       </div>
     </nav>
   );
-};
-
-export default Navigation;
+}

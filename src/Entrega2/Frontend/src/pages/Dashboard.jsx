@@ -131,18 +131,21 @@ const Dashboard = ({ filters = {}, onFiltersChange }) => {
   }, [internalFilters]);
 
   // --- Hooks de Efeito (do Arquivo 2) ---
+  // Initial data load
   useEffect(() => {
     fetchData(false, internalFilters);
-  }, [fetchData]);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Refetch when filters change
   useEffect(() => {
     if (hasInitialized) {
-      const timeoutId = setTimeout(() => {
+      // Debounce filter changes to avoid excessive API calls
+      const handler = setTimeout(() => {
         fetchData(true, internalFilters);
-      }, 500); // Debounce
-      return () => clearTimeout(timeoutId);
+      }, 500);
+      return () => clearTimeout(handler);
     }
-  }, [internalFilters, hasInitialized, fetchData]);
+  }, [internalFilters]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleRefresh = () => fetchData(true);
 
@@ -312,6 +315,7 @@ const Dashboard = ({ filters = {}, onFiltersChange }) => {
   // --- 5. JSX Principal (Fusão dos dois) ---
   return (
     <motion.div className="dashboard-page" variants={pageVariants} initial="hidden" animate="visible">
+      {/* O padding e max-width do .dashboard-page agora estão no App.css para consistência */}
       
       {/* Cabeçalho dinâmico (baseado no Arquivo 1) */}
       <motion.div className="page-header-section" variants={sectionVariants}>

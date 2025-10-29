@@ -77,17 +77,16 @@ const ValidationScreen = ({ filters, onError }) => {
 
   useEffect(() => {
     fetchData(false, filters);
-  }, [fetchData]);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (hasInitialized) {
-      const timeoutId = setTimeout(() => {
+      const handler = setTimeout(() => {
         fetchData(true, filters);
       }, 500);
-
-      return () => clearTimeout(timeoutId);
+      return () => clearTimeout(handler);
     }
-  }, [filters]);
+  }, [filters]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleRefresh = () => fetchData(true);
 
@@ -159,7 +158,8 @@ const ValidationScreen = ({ filters, onError }) => {
   }, []);
 
   return (
-    <motion.div className="validation-screen-page" variants={pageVariants} initial="hidden" animate="visible">
+    <motion.div className="validation-screen-page" variants={pageVariants} initial="hidden" animate="visible"> {/* Keep page-specific container */}
+      {/* Page Header Section - now uses common styles */}
       <motion.div className="page-header-section" variants={sectionVariants}>
         <div className="page-header">
           <div className="header-content">
@@ -189,7 +189,7 @@ const ValidationScreen = ({ filters, onError }) => {
         </div>
       </motion.div>
 
-      {/* KPI Cards */}
+      {/* KPI Cards - now uses common styles */}
       <motion.div className="kpi-grid" variants={sectionVariants}>
         <KPICard
           icon={<FiTag />}
@@ -221,7 +221,7 @@ const ValidationScreen = ({ filters, onError }) => {
         />
       </motion.div>
 
-      {/* Filter Controls */}
+      {/* Filter Controls - unique to this page */}
       <motion.div className="filter-section" variants={sectionVariants}>
         <div className="filter-controls">
           <div className="filter-group">
@@ -245,7 +245,7 @@ const ValidationScreen = ({ filters, onError }) => {
         </div>
       </motion.div>
 
-      {/* Revenue and Validation Charts */}
+      {/* Revenue and Validation Charts - now uses common styles for charts-row and chart-container-half */}
       <motion.div className="charts-row" variants={sectionVariants}>
         <div className="chart-container-half">
           <div className="chart-header">
@@ -272,7 +272,7 @@ const ValidationScreen = ({ filters, onError }) => {
         </div>
       </motion.div>
 
-      {/* Coupon Summary Table */}
+      {/* Coupon Summary Table - now uses common styles for table-section and table-header */}
       <motion.div className="table-section" variants={sectionVariants}>
         <div className="table-header">
           <h3>Resumo de Validação por Tipo de Cupom</h3>
@@ -336,7 +336,7 @@ const ValidationScreen = ({ filters, onError }) => {
         </div>
       </motion.div>
 
-      {/* Payout Tracking Table */}
+      {/* Payout Tracking Table - now uses common styles for table-section and table-header */}
       <motion.div className="table-section" variants={sectionVariants}>
         <div className="table-header">
           <h3>Controle de Repasses</h3>

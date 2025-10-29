@@ -3,7 +3,7 @@
   bottom: 2rem;
   left: 2rem;
   z-index: 1000;
-  background: linear-gradient(135deg, var(--primary-yellow) 0%, var(--secondary-yellow) 100%);
+  background: linear-gradient(135deg, var(--primary-yellow) 0%, var(--secondary-yellow) 100%); /* Keep specific gradient */
   border: none;
   border-radius: 50%;
   width: 50px;
@@ -52,7 +52,7 @@
 }
 
 [data-theme="dark"] .dark-mode-toggle {
-  background: linear-gradient(135deg, var(--primary-dark-blue) 0%, var(--accent-blue) 100%);
+  background: linear-gradient(135deg, var(--primary-dark-blue) 0%, var(--accent-blue) 100%); /* Keep specific gradient */
 }
 
 [data-theme="dark"] .toggle-icon {

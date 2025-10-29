@@ -79,17 +79,16 @@ const FinancialAnalysis = ({ filters, onError }) => {
 
   useEffect(() => {
     fetchData(false, filters);
-  }, [fetchData]);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (hasInitialized) {
-      const timeoutId = setTimeout(() => {
+      const handler = setTimeout(() => {
         fetchData(true, filters);
       }, 500);
-
-      return () => clearTimeout(timeoutId);
+      return () => clearTimeout(handler);
     }
-  }, [filters]);
+  }, [filters]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleRefresh = () => fetchData(true);
 
@@ -135,7 +134,8 @@ const FinancialAnalysis = ({ filters, onError }) => {
   })) || [];
 
   return (
-    <motion.div className="financial-analysis-page" variants={pageVariants} initial="hidden" animate="visible">
+    <motion.div className="financial-analysis-page" variants={pageVariants} initial="hidden" animate="visible"> {/* Keep page-specific container */}
+      {/* Page Header Section - now uses common styles */}
       <motion.div className="page-header-section" variants={sectionVariants}>
         <div className="page-header">
           <div className="header-content">
@@ -157,7 +157,7 @@ const FinancialAnalysis = ({ filters, onError }) => {
         </div>
       </motion.div>
 
-      {/* KPI Cards */}
+      {/* KPI Cards - now uses common styles */}
       <motion.div className="kpi-grid" variants={sectionVariants}>
         <KPICard
           icon={<FiDollarSign />}
@@ -189,7 +189,7 @@ const FinancialAnalysis = ({ filters, onError }) => {
         />
       </motion.div>
 
-      {/* Monthly Operating Margin Chart */}
+      {/* Monthly Operating Margin Chart - now uses common styles for chart-section and chart-header */}
       <motion.div className="chart-section" variants={sectionVariants}>
         <div className="chart-header">
           <h2>Evolução da Margem Operacional</h2>
@@ -233,7 +233,7 @@ const FinancialAnalysis = ({ filters, onError }) => {
         </div>
       </motion.div>
 
-      {/* Net Revenue by Type */}
+      {/* Net Revenue by Type - now uses common styles for charts-row and chart-container-half */}
       <motion.div className="charts-row" variants={sectionVariants}>
         <div className="chart-container-half">
           <NetRevenueChart
@@ -254,7 +254,7 @@ const FinancialAnalysis = ({ filters, onError }) => {
         </div>
       </motion.div>
 
-      {/* Insights Cards */}
+      {/* Insights Cards - now uses common styles for insights-grid and insight-card */}
       <motion.div className="insights-grid" variants={sectionVariants}>
         <InsightCard
           icon={<FiTrendingUp />}
@@ -286,7 +286,7 @@ const FinancialAnalysis = ({ filters, onError }) => {
         />
       </motion.div>
 
-      {/* Detailed Table */}
+      {/* Detailed Table - now uses common styles for table-section and table-header */}
       <motion.div className="table-section" variants={sectionVariants}>
         <div className="table-header">
           <h3>Análise Detalhada por Tipo de Cupom</h3>

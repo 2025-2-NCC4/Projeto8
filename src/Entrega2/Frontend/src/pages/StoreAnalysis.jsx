@@ -48,7 +48,7 @@ const PerformanceTable = ({ data, onSort, sortConfig }) => {
   };
 
   return (
-    <div className="performance-table-container">
+    <div className="table-section performance-table-container"> {/* Use common table-section */}
       <div className="table-header">
         <div className="table-title"><FiAward size={24} /><h3>Ranking de Performance das Lojas</h3></div>
         <p>Análise detalhada da performance de cada loja parceira. Clique nos cabeçalhos para ordenar.</p>
@@ -130,7 +130,7 @@ const CategoryPerformance = ({ filters }) => {
   }, [filters]);
 
   return (
-    <div className="analysis-item category-performance">
+    <div className="chart-section analysis-item category-performance"> {/* Use common chart-section */}
       <div className="category-title"><FiBarChart size={24} /><h3>Top Categorias por Receita</h3></div>
       <ResponsiveContainer width="100%" height={450}>
         <BarChart data={categoryData} layout="vertical" margin={{ top: 5, right: 30, left: 80, bottom: 5 }}>
@@ -162,7 +162,7 @@ const ScatterPlotAnalysis = ({ data }) => {
   };
 
   return (
-    <div className="analysis-item scatter-plot">
+    <div className="chart-section analysis-item scatter-plot"> {/* Use common chart-section */}
       <div className="scatter-title"><FiTarget size={24} /><h3>Análise de Eficiência das Lojas</h3></div>
       <ResponsiveContainer width="100%" height={350}>
         <ScatterChart margin={{ top: 20, right: 30, bottom: 20, left: 20 }}>
@@ -231,12 +231,12 @@ const StoreAnalysis = ({ filters }) => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <div className="page-header">
-        <div className="page-title"><FiShoppingBag size={32} /><h1>Análise de Performance das Lojas</h1></div>
-        <p>Avalie o desempenho das lojas parceiras através de métricas chave e rankings.</p>
-      </div>
-
-      <StoreMetrics data={storesData} />
+      {/* Page Header Section - now uses common styles */}
+      <motion.div className="page-header-section">
+        <div className="page-header">
+          <div className="header-content"><h1>Análise de Performance das Lojas</h1><p>Avalie o desempenho das lojas parceiras através de métricas chave e rankings.</p></div>
+        </div>
+      </motion.div>
 
       <div className="analysis-controls">
         <div className="control-group">
@@ -256,7 +256,9 @@ const StoreAnalysis = ({ filters }) => {
         </div>
       </div>
 
-      <PerformanceTable data={filteredAndSortedData} onSort={handleSort} sortConfig={sortConfig} />
+      <StoreMetrics data={storesData} /> {/* This component is unique, keep its rendering here */}
+
+      <PerformanceTable data={filteredAndSortedData} onSort={handleSort} sortConfig={sortConfig} /> {/* This component is unique, keep its rendering here */}
 
       <div className="additional-analysis">
         <CategoryPerformance filters={filters} />

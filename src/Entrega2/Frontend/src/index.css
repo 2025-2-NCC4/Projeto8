@@ -1,5 +1,5 @@
 body {
   margin: 0;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  background-color: #f0f2f5;
+  /* Base font and background are now defined in App.css */
+  /* This file can be used for very minimal, absolute global resets if needed, or kept empty. */
 }

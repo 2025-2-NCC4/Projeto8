@@ -9,7 +9,7 @@ import ValidationScreen from './pages/ValidationScreen';
 import GeographicAnalysis from './pages/GeographicAnalysis';
 import UserAnalysis from './pages/UserAnalysis';
 import StoreAnalysis from './pages/StoreAnalysis';
-import { ProfileProvider } from './context/ProfileContext';
+import { ProfileProvider } from './context/ProfileContext'; // Importação já existe, será usada abaixo
 import './App.css';
 
 export const ThemeContext = createContext();
@@ -100,8 +100,9 @@ const App = () => {
 
   return (
     <ThemeContext.Provider value={themeContextValue}>
+      {/* 1. Envolver a aplicação com o ProfileProvider */}
       <ProfileProvider>
-        <div className={`app-container ${darkMode ? 'dark-theme' : 'light-theme'}`} data-theme={darkMode ? 'dark' : 'light'}>
+        <div className={`app-container ${darkMode ? 'dark-theme' : 'light-theme'} dashboard-page`} data-theme={darkMode ? 'dark' : 'light'}>
           {error && (
             <div className="error-banner">
               <AlertTriangle className="error-icon" size={20} />
@@ -113,6 +114,7 @@ const App = () => {
               <Navigation currentPage={currentPage} onPageChange={setCurrentPage} />
             </aside>
             <main className="dashboard-main">
+              {/* 2. Renderizar o Header que contém o seletor de perfil */}
               <Header />
               {renderCurrentPage()}
             </main>

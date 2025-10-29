@@ -1,9 +1,6 @@
-
-
 .user-analysis-page {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
 }
 
 .user-analytics-layout {
@@ -24,10 +21,10 @@
 }
 
 .demographic-charts {
-  background: var(--card-bg-color);
-  border-radius: 16px;
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
   padding: 1.5rem;
-  box-shadow: var(--card-shadow);
+  box-shadow: var(--card-shadow); /* Use variable */
   border: 1px solid var(--border-color);
 }
 
@@ -54,18 +51,18 @@
 }
 
 .time-analysis-metrics {
-  background: var(--card-bg-color);
-  border-radius: 16px;
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
   padding: 1.5rem;
-  box-shadow: var(--card-shadow);
+  box-shadow: var(--card-shadow); /* Use variable */
   border: 1px solid var(--border-color);
 }
 
 .peak-hours-heatmap {
-  background: var(--card-bg-color);
-  border-radius: 16px;
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
   padding: 1.5rem;
-  box-shadow: var(--card-shadow);
+  box-shadow: var(--card-shadow); /* Use variable */
   border: 1px solid var(--border-color);
 }
 
@@ -86,8 +83,8 @@
   width: 100%;
   border: 1px solid var(--border-color);
   border-radius: 8px;
-  padding: 0.5rem;
-  background: var(--body-bg-color);
+  padding: var(--spacing-xs);
+  background: var(--body-bg);
 }
 
 .heatmap-hour-header, .heatmap-row {
@@ -167,10 +164,10 @@
 }
 
 .behavioral-insights {
-  background: var(--card-bg-color);
-  border-radius: 16px;
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
   padding: 1.5rem;
-  box-shadow: var(--card-shadow);
+  box-shadow: var(--card-shadow); /* Use variable */
   border: 1px solid var(--border-color);
 }
 
@@ -181,10 +178,10 @@
 }
 
 .insight-card {
-  background: var(--card-bg-color);
-  border-radius: 16px;
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
   padding: 2rem;
-  box-shadow: var(--card-shadow);
+  box-shadow: var(--card-shadow); /* Use variable */
   border: 1px solid var(--border-color);
 }
 

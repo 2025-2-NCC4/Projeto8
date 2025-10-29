@@ -92,17 +92,16 @@ const CouponAnalysis = ({ filters, onError }) => {
 
   useEffect(() => {
     fetchData(false, filters);
-  }, [fetchData]);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (hasInitialized) {
-      const timeoutId = setTimeout(() => {
+      const handler = setTimeout(() => {
         fetchData(true, filters);
       }, 500);
-
-      return () => clearTimeout(timeoutId);
+      return () => clearTimeout(handler);
     }
-  }, [filters]);
+  }, [filters]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleRefresh = () => fetchData(true);
 
@@ -160,7 +159,8 @@ const CouponAnalysis = ({ filters, onError }) => {
   }));
 
   return (
-    <motion.div className="coupon-analysis-page" variants={pageVariants} initial="hidden" animate="visible">
+    <motion.div className="coupon-analysis-page" variants={pageVariants} initial="hidden" animate="visible"> {/* Keep page-specific container */}
+      {/* Page Header Section - now uses common styles */}
       <motion.div className="page-header-section" variants={sectionVariants}>
         <div className="page-header">
           <div className="header-content">
@@ -182,7 +182,7 @@ const CouponAnalysis = ({ filters, onError }) => {
         </div>
       </motion.div>
 
-      {/* KPI Cards */}
+      {/* KPI Cards - now uses common styles */}
       <motion.div className="kpi-grid" variants={sectionVariants}>
         <KPICard
           icon={<FiTag />}
@@ -214,7 +214,7 @@ const CouponAnalysis = ({ filters, onError }) => {
         />
       </motion.div>
 
-      {/* Performance by Type Chart */}
+      {/* Performance by Type Chart - now uses common styles for chart-section and chart-header */}
       <motion.div className="chart-section" variants={sectionVariants}>
         <div className="chart-header">
           <h2>Performance por Tipo de Cupom</h2>
@@ -227,13 +227,7 @@ const CouponAnalysis = ({ filters, onError }) => {
           padding: '1rem'
         }}>
           {performanceByType.map((type, index) => (
-            <div key={index} style={{
-              padding: '1.5rem',
-              backgroundColor: 'var(--card-background)',
-              borderRadius: '1rem',
-              border: '1px solid var(--border-color)',
-              textAlign: 'center'
-            }}>
+            <div key={index} className="coupon-type-card"> {/* Added a specific class for unique styling */}
               <h3>{type.type}</h3>
               <p><strong>Receita:</strong> R$ {type.totalValue.toLocaleString()}</p>
               <p><strong>Cupons:</strong> {type.totalTransactions.toLocaleString()}</p>
@@ -243,7 +237,7 @@ const CouponAnalysis = ({ filters, onError }) => {
         </div>
       </motion.div>
 
-      {/* Daily Participation and Period Distribution */}
+      {/* Daily Participation and Period Distribution - now uses common styles for charts-row and chart-container-half */}
       <motion.div className="charts-row" variants={sectionVariants}>
         <div className="chart-container-half">
           <TemporalChart
@@ -271,7 +265,7 @@ const CouponAnalysis = ({ filters, onError }) => {
         </div>
       </motion.div>
 
-      {/* Top Categories */}
+      {/* Top Categories - now uses common styles for chart-section and chart-header */}
       <motion.div className="chart-section" variants={sectionVariants}>
         <div className="chart-header">
           <h2>Top 10 Categorias de Estabelecimento</h2>
@@ -283,7 +277,7 @@ const CouponAnalysis = ({ filters, onError }) => {
         />
       </motion.div>
 
-      {/* Insights Cards */}
+      {/* Insights Cards - now uses common styles for insights-grid and insight-card */}
       <motion.div className="insights-grid" variants={sectionVariants}>
         <InsightCard
           icon={<FiClock />}
@@ -315,7 +309,7 @@ const CouponAnalysis = ({ filters, onError }) => {
         />
       </motion.div>
 
-      {/* Coupon Type Performance Table */}
+      {/* Coupon Type Performance Table - now uses common styles for table-section and table-header */}
       <motion.div className="table-section" variants={sectionVariants}>
         <div className="table-header">
           <h3>Performance Detalhada por Tipo de Cupom</h3>
@@ -353,7 +347,7 @@ const CouponAnalysis = ({ filters, onError }) => {
         </div>
       </motion.div>
 
-      {/* Categories Performance Table */}
+      {/* Categories Performance Table - now uses common styles for table-section and table-header */}
       <motion.div className="table-section" variants={sectionVariants}>
         <div className="table-header">
           <h3>Performance por Categoria de Estabelecimento</h3>

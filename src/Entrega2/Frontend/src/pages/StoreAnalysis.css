@@ -1,9 +1,6 @@
-
-
 .store-analysis-page {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
 }
 
 .store-metrics {
@@ -27,10 +24,10 @@
   flex-wrap: wrap;
   gap: 1.5rem;
   align-items: center;
-  background: var(--card-bg-color);
-  border-radius: 16px;
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
   padding: 1.5rem;
-  box-shadow: var(--card-shadow);
+  box-shadow: var(--card-shadow); /* Use variable */
   border: 1px solid var(--border-color);
 }
 
@@ -53,17 +50,17 @@
   padding: 0.5rem 1rem;
   border-radius: 8px;
   border: 1px solid var(--border-color);
-  background: var(--body-bg-color);
+  background: var(--body-bg);
   color: var(--text-primary-color);
   font-size: 0.9rem;
   cursor: pointer;
 }
 
 .performance-table-container {
-  background: var(--card-bg-color);
-  border-radius: 16px;
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
   padding: 1.5rem;
-  box-shadow: var(--card-shadow);
+  box-shadow: var(--card-shadow); /* Use variable */
   border: 1px solid var(--border-color);
   animation: slideInUp 0.6s ease-out;
 }
@@ -197,10 +194,10 @@
 }
 
 .analysis-item {
-  background: var(--card-bg-color);
-  border-radius: 16px;
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
   padding: 1.5rem;
-  box-shadow: var(--card-shadow);
+  box-shadow: var(--card-shadow); /* Use variable */
   border: 1px solid var(--border-color);
   animation: fadeInScale 0.5s ease-out;
   transition: all 0.3s ease;
