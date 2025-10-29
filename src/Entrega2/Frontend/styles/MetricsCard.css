@@ -1,0 +1,118 @@
+.metrics-card {
+  background: var(--card-background);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border-color);
+  border-radius: 1.25rem;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+  transition: var(--transition-smooth);
+  box-shadow: var(--shadow-lg);
+}
+
+.metrics-card:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: var(--shadow-xl);
+  border-color: var(--primary-light);
+}
+
+.metrics-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--gradient-primary);
+  border-radius: 1.25rem 1.25rem 0 0;
+}
+
+.metrics-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.metrics-icon {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 1rem;
+  background: var(--gradient-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  box-shadow: var(--shadow-md);
+  transition: var(--transition-smooth);
+}
+
+.metrics-card:hover .metrics-icon {
+  transform: scale(1.1) rotate(5deg);
+  box-shadow: var(--shadow-lg);
+}
+
+.metrics-trend {
+  display: flex;
+  align-items: end;
+  gap: 2px;
+  height: 2rem;
+}
+
+.trend-bar {
+  width: 4px;
+  background: var(--gradient-primary);
+  border-radius: 2px;
+  opacity: 0.7;
+  transition: var(--transition-smooth);
+}
+
+.metrics-card:hover .trend-bar {
+  opacity: 1;
+}
+
+.metrics-content {
+  position: relative;
+}
+
+.metrics-title {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin: 0 0 0.75rem 0;
+  text-transform: uppercase;
+  letter-spacing: 0.75px;
+}
+
+.metrics-value {
+  font-size: 2.25rem;
+  font-weight: 800;
+  margin: 0 0 1rem 0;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+}
+
+.metrics-change {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 0.5rem 0.75rem;
+  background: var(--hover-bg);
+  border-radius: 0.5rem;
+  transition: var(--transition-smooth);
+}
+
+.change-icon {
+  display: flex;
+  align-items: center;
+}
+
+.change-value {
+  font-size: 0.875rem;
+}

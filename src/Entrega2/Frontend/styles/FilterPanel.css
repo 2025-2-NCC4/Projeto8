@@ -1,0 +1,92 @@
+.filter-panel {
+  background-color: var(--card-background-color);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  margin-bottom: 24px;
+  box-shadow: 0 1px 3px var(--shadow-color);
+  overflow: hidden;
+}
+
+.filter-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-color);
+  cursor: pointer;
+}
+
+.filter-panel-header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.filter-content {
+  padding: 20px;
+}
+
+.filter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-group label {
+  font-size: 0.875rem;
+  margin-bottom: 6px;
+  color: var(--text-color-light);
+}
+
+.filter-group input,
+.filter-group select {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  font-size: 1rem;
+}
+
+.quick-filters {
+  margin-bottom: 20px;
+}
+
+.quick-filter-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-quick-filter {
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+  background-color: #f9fafb;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-quick-filter:hover {
+  background-color: #f3f4f6;
+}
+
+.btn-clear-filters {
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+  background-color: #f9fafb;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  align-self: flex-end;
+  height: 100%;
+}
+
+.btn-toggle {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+}

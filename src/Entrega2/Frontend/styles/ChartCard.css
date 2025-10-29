@@ -1,0 +1,66 @@
+.chart-card {
+  background-color: var(--card-background-color);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 1px 3px var(--shadow-color);
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.chart-title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.chart-subtitle {
+  margin: 4px 0 0 0;
+  font-size: 0.9rem;
+  color: var(--text-color-light);
+}
+
+.chart-content {
+  padding: 20px;
+  flex-grow: 1;
+  position: relative;
+  min-height: 300px; 
+}
+
+.loading-overlay, .error-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.7);
+  z-index: 1;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #ccc;
+  border-top: 4px solid var(--primary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 10px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.error-icon {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}

@@ -1,0 +1,464 @@
+.validation-screen-page {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  min-height: 100vh;
+}
+
+.page-header-section {
+  margin-bottom: 2.5rem;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.header-content h1 {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.header-content p {
+  font-size: 1.125rem;
+  color: var(--text-secondary);
+  max-width: 600px;
+  line-height: 1.6;
+}
+
+.header-actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.refresh-btn, .action-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.refresh-btn {
+  background: var(--primary);
+  color: white;
+}
+
+.action-btn {
+  background: var(--card-background);
+  color: var(--text-primary);
+  border: 2px solid var(--border-color);
+}
+
+.action-btn.secondary {
+  background: var(--gray-100);
+  color: var(--text-secondary);
+}
+
+.action-btn.primary {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+.action-btn.success {
+  background: var(--success);
+  color: white;
+  border-color: var(--success);
+}
+
+.action-btn.small {
+  padding: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.refresh-btn:hover:not(:disabled),
+.action-btn:hover {
+  transform: translateY(-1px);
+}
+
+.refresh-btn:hover:not(:disabled) {
+  background: var(--primary-hover);
+}
+
+.action-btn:hover {
+  border-color: var(--primary);
+}
+
+.refresh-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.spinning {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.filter-section {
+  margin-bottom: 2rem;
+}
+
+.filter-controls {
+  display: flex;
+  gap: 2rem;
+  align-items: end;
+  background: var(--card-background);
+  padding: 1.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 200px;
+}
+
+.filter-group label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.filter-group select {
+  padding: 0.75rem;
+  border: 2px solid var(--border-color);
+  border-radius: 0.5rem;
+  background: var(--card-background);
+  color: var(--text-primary);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filter-group select:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.charts-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.chart-container-half {
+  background: var(--card-background);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.chart-header {
+  margin-bottom: 1.5rem;
+}
+
+.chart-header h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.chart-header p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.table-section {
+  background: var(--card-background);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+.table-header {
+  margin-bottom: 1.5rem;
+}
+
+.table-header h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.table-header p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.validation-table,
+.payout-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--card-background);
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.validation-table th,
+.payout-table th {
+  background: var(--gray-50);
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: 0.875rem;
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 2px solid var(--border-color);
+  white-space: nowrap;
+}
+
+.validation-table td,
+.payout-table td {
+  padding: 0.875rem 1rem;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.875rem;
+  vertical-align: middle;
+}
+
+.validation-table tr:hover,
+.payout-table tr:hover {
+  background: var(--gray-50);
+}
+
+.type-cell,
+.store-cell {
+  font-weight: 500;
+  color: var(--text-primary);
+  max-width: 150px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.month-cell {
+  font-weight: 500;
+  color: var(--text-primary);
+  text-align: center;
+}
+
+.count-cell {
+  color: var(--text-secondary);
+  text-align: right;
+}
+
+.count-cell.success {
+  color: var(--success);
+  font-weight: 500;
+}
+
+.count-cell.warning {
+  color: var(--warning);
+  font-weight: 500;
+}
+
+.currency-cell {
+  font-weight: 500;
+  color: var(--text-primary);
+  text-align: right;
+}
+
+.currency-cell.primary {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.percentage-cell {
+  text-align: center;
+}
+
+.progress-bar {
+  position: relative;
+  width: 100%;
+  height: 24px;
+  background: var(--gray-200);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--success), var(--success-light));
+  border-radius: 12px;
+  transition: width 0.3s ease;
+}
+
+.progress-bar span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.status-badge.validado {
+  background: var(--success-light);
+  color: var(--success);
+  border: 1px solid var(--success-light);
+}
+
+.status-badge.pendente {
+  background: var(--warning-light);
+  color: var(--warning);
+  border: 1px solid var(--warning-light);
+}
+
+.status-badge.pago {
+  background: var(--success-light);
+  color: var(--success);
+  border: 1px solid var(--success-light);
+}
+
+.status-indicator {
+  display: flex;
+  align-items: center;
+}
+
+.status-count {
+  font-weight: 400;
+  opacity: 0.8;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.dashboard-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+  gap: 1rem;
+}
+
+.loading-spinner {
+  border: 3px solid var(--border-color);
+  border-top: 3px solid var(--primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.loading-spinner.large {
+  width: 40px;
+  height: 40px;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .validation-screen-page {
+    padding: 1.5rem;
+  }
+
+  .charts-row {
+    grid-template-columns: 1fr;
+  }
+
+  .kpi-grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+
+  .filter-controls {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .filter-group {
+    min-width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .validation-screen-page {
+    padding: 1rem;
+  }
+
+  .page-header {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .header-content h1 {
+    font-size: 1.875rem;
+  }
+
+  .kpi-grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+  }
+
+  .validation-table,
+  .payout-table {
+    font-size: 0.75rem;
+  }
+
+  .validation-table th,
+  .validation-table td,
+  .payout-table th,
+  .payout-table td {
+    padding: 0.5rem;
+  }
+
+  .type-cell,
+  .store-cell {
+    max-width: 100px;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+  }
+}

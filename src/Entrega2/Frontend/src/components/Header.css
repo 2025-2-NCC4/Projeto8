@@ -1,0 +1,24 @@
+.profile-selector {
+  display: flex;
+  align-items: center;
+  background-color: var(--card-bg-color);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 0 10px;
+  margin-right: 15px;
+  color: var(--text-color);
+}
+
+.profile-selector svg {
+  margin-right: 8px;
+}
+
+.profile-selector select {
+  background: transparent;
+  border: none;
+  color: var(--text-color);
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 8px 5px;
+  cursor: pointer;
+}

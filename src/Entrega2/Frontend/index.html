@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/jpeg" href="/PicMoneyIcon.jpeg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Dashboard de análise de dados da Pick Money - Visualize suas métricas em tempo real" />
+  <meta name="theme-color" content="#1e40af" />
+  
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  
+  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <title>PIC Money Dash</title>
+  
+  <style>
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+      background-color: #f8fafc;
+      margin: 0;
+      padding: 0;
+    }
+    
+    
+    #root {
+      min-height: 100vh;
+    }
+    
+    .initial-loading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #1e40af 0%, #3730a3 50%, #581c87 100%);
+      color: white;
+    }
+    
+    .loading-logo {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 2rem;
+      background: linear-gradient(135deg, #ffffff 0%, #e0e7ff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: #ffffff;
+      animation: spin 1s ease-in-out infinite;
+      margin-bottom: 1rem;
+    }
+    
+    .loading-text {
+      font-size: 16px;
+      color: #c7d2fe;
+      text-align: center;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    
+    #root:not(:empty) + .initial-loading {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="root">
+    
+    <div class="initial-loading">
+      <div class="loading-logo">Pick Money</div>
+      <div class="loading-spinner"></div>
+      <div class="loading-text">Carregando dashboard...</div>
+    </div>
+  </div>
+  
+  <script type="module" src="/src/main.jsx"></script>
+</body>
+</html>
