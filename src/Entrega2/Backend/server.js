@@ -907,6 +907,23 @@ app.get('/api/status', (req, res) => {
     }
   });
 });
+app.get('/api/alerts/settings', (req, res) => {
+  res.json(alertSettings);
+});
+
+app.post('/api/alerts/settings', (req, res) => {
+  const { minRevenue, maxCouponUsagePercent } = req.body;
+
+  if (minRevenue !== undefined) {
+    alertSettings.minRevenue = parseFloat(minRevenue);
+  }
+  if (maxCouponUsagePercent !== undefined) {
+    alertSettings.maxCouponUsagePercent = parseFloat(maxCouponUsagePercent);
+  }
+
+  console.log('Configurações de alerta atualizadas:', alertSettings);
+  res.json({ success: true, settings: alertSettings });
+});
 
 app.use((error, req, res, next) => {
   console.error('Erro não tratado:', error);

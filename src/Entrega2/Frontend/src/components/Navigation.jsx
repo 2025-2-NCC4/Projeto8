@@ -1,6 +1,6 @@
 import React from 'react';
 import { BarChart3, Map, Users, Store, DollarSign, Tag, CheckSquare } from 'lucide-react';
-import './Navigation.css';
+import '../App.css';
 import { useProfile, PROFILES } from '../context/ProfileContext';
 
 const Navigation = ({ currentPage, onPageChange }) => {
@@ -81,3 +81,4 @@ const Navigation = ({ currentPage, onPageChange }) => {
     </nav>
   );
 }
+export default Navigation;

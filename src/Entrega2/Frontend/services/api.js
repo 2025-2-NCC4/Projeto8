@@ -143,5 +143,26 @@ export const dashboardAPI = {
     }
   }
 };
+// Dentro do seu endpoint /api/kpis
+const kpis = {
+  totalRevenue: 5000, // (valor calculado)
+  couponUsage: 60, // (valor calculado)
+  // ...
+};
+
+// Adiciona lógica de alerta
+const kpiResponse = {
+  totalRevenue: {
+    value: kpis.totalRevenue,
+    status: kpis.totalRevenue < alertSettings.minRevenue ? 'alert' : 'normal'
+  },
+  couponUsage: {
+    value: kpis.couponUsage,
+    status: kpis.couponUsage > alertSettings.maxCouponUsagePercent ? 'alert' : 'normal'
+  },
+  // ...
+};
+
+res.json(kpiResponse);
 
 export default api;

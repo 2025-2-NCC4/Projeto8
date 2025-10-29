@@ -1,6 +1,8 @@
 import React, { useState, useEffect, createContext, useContext } from 'react';
+import './index.css';
+import './App.css';
 import { AlertTriangle } from 'lucide-react';
-import Navigation from './components/Navigation';
+import Navigation from '/src/components/Navigation.jsx';
 import Header from './components/Header';
 import Dashboard from './pages/Dashboard';
 import FinancialAnalysis from './pages/FinancialAnalysis';
