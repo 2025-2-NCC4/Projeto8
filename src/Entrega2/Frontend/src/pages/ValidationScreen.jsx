@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   FiCheckCircle,
   FiClock,
@@ -9,7 +9,8 @@ import {
   FiFilter,
   FiDownload,
   FiEye,
-  FiAlertCircle
+  FiAlertCircle,
+  FiX
 } from 'react-icons/fi';
 import { dashboardAPI } from '../services/api';
 import KPICard from '../components/KPICard';
@@ -39,6 +40,9 @@ const ValidationScreen = ({ filters, onError }) => {
   const [hasInitialized, setHasInitialized] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState('all');
   const [selectedMonth, setSelectedMonth] = useState('all');
+  const [viewModal, setViewModal] = useState({ isOpen: false, data: null, type: null });
+  const [validateModal, setValidateModal] = useState({ isOpen: false, data: null });
+  const [paymentModal, setPaymentModal] = useState({ isOpen: false, data: null });
 
   const fetchData = useCallback(async (isRefresh = false, filtersToUse = filters) => {
     if (isRefresh) setRefreshing(true);
@@ -89,6 +93,30 @@ const ValidationScreen = ({ filters, onError }) => {
   }, [filters]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleRefresh = () => fetchData(true);
+
+  const handleViewDetails = (item, type) => {
+    setViewModal({ isOpen: true, data: item, type });
+  };
+
+  const handleValidate = (item) => {
+    setValidateModal({ isOpen: true, data: item });
+  };
+
+  const handleProcessPayment = (item) => {
+    setPaymentModal({ isOpen: true, data: item });
+  };
+
+  const confirmValidation = () => {
+    console.log('Validating coupon:', validateModal.data);
+    setValidateModal({ isOpen: false, data: null });
+    fetchData(true);
+  };
+
+  const confirmPayment = () => {
+    console.log('Processing payment:', paymentModal.data);
+    setPaymentModal({ isOpen: false, data: null });
+    fetchData(true);
+  };
 
   const pageVariants = {
     hidden: { opacity: 0 },
@@ -321,10 +349,19 @@ const ValidationScreen = ({ filters, onError }) => {
                   </td>
                   <td>
                     <div className="action-buttons">
-                      <button className="action-btn small">
+                      <button
+                        className="action-btn small"
+                        onClick={() => handleViewDetails(item, 'coupon')}
+                        title="Ver detalhes"
+                      >
                         <FiEye />
                       </button>
-                      <button className="action-btn small primary">
+                      <button
+                        className="action-btn small primary"
+                        onClick={() => handleValidate(item)}
+                        title="Validar cupons"
+                        disabled={item.pendingCoupons === 0}
+                      >
                         <FiCheckCircle />
                       </button>
                     </div>
@@ -375,10 +412,19 @@ const ValidationScreen = ({ filters, onError }) => {
                   </td>
                   <td>
                     <div className="action-buttons">
-                      <button className="action-btn small">
+                      <button
+                        className="action-btn small"
+                        onClick={() => handleViewDetails(item, 'payout')}
+                        title="Ver detalhes"
+                      >
                         <FiEye />
                       </button>
-                      <button className="action-btn small success">
+                      <button
+                        className="action-btn small success"
+                        onClick={() => handleProcessPayment(item)}
+                        title="Processar pagamento"
+                        disabled={item.status === 'Pago'}
+                      >
                         <FiDollarSign />
                       </button>
                     </div>
@@ -389,6 +435,251 @@ const ValidationScreen = ({ filters, onError }) => {
           </table>
         </div>
       </motion.div>
+
+      <AnimatePresence>
+        {viewModal.isOpen && (
+          <motion.div
+            className="modal-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setViewModal({ isOpen: false, data: null, type: null })}
+          >
+            <motion.div
+              className="modal-content"
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="modal-header">
+                <h3>
+                  <FiEye /> Detalhes {viewModal.type === 'coupon' ? 'do Cupom' : 'do Repasse'}
+                </h3>
+                <button
+                  className="modal-close"
+                  onClick={() => setViewModal({ isOpen: false, data: null, type: null })}
+                >
+                  <FiX />
+                </button>
+              </div>
+              <div className="modal-body">
+                {viewModal.type === 'coupon' ? (
+                  <div className="details-grid">
+                    <div className="detail-item">
+                      <label>Tipo de Cupom:</label>
+                      <span className="detail-value">{viewModal.data?.type}</span>
+                    </div>
+                    <div className="detail-item">
+                      <label>Total de Cupons:</label>
+                      <span className="detail-value">{viewModal.data?.totalCoupons.toLocaleString()}</span>
+                    </div>
+                    <div className="detail-item">
+                      <label>Cupons Validados:</label>
+                      <span className="detail-value success">{viewModal.data?.validatedCoupons.toLocaleString()}</span>
+                    </div>
+                    <div className="detail-item">
+                      <label>Cupons Pendentes:</label>
+                      <span className="detail-value warning">{viewModal.data?.pendingCoupons.toLocaleString()}</span>
+                    </div>
+                    <div className="detail-item">
+                      <label>Taxa de Validação:</label>
+                      <span className="detail-value">{viewModal.data?.validationRate.toFixed(1)}%</span>
+                    </div>
+                    <div className="detail-item">
+                      <label>Receita Total:</label>
+                      <span className="detail-value">R$ {viewModal.data?.totalRevenue.toLocaleString()}</span>
+                    </div>
+                    <div className="detail-item">
+                      <label>Repasses Totais:</label>
+                      <span className="detail-value">R$ {viewModal.data?.totalPayout.toLocaleString()}</span>
+                    </div>
+                    <div className="detail-item">
+                      <label>Valor Médio:</label>
+                      <span className="detail-value">R$ {viewModal.data?.avgCouponValue.toFixed(2)}</span>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="details-grid">
+                    <div className="detail-item">
+                      <label>Mês:</label>
+                      <span className="detail-value">{viewModal.data?.month}</span>
+                    </div>
+                    <div className="detail-item">
+                      <label>Estabelecimento:</label>
+                      <span className="detail-value">{viewModal.data?.store}</span>
+                    </div>
+                    <div className="detail-item">
+                      <label>Repasse Total:</label>
+                      <span className="detail-value primary">R$ {viewModal.data?.totalPayout.toLocaleString()}</span>
+                    </div>
+                    <div className="detail-item">
+                      <label>Transações:</label>
+                      <span className="detail-value">{viewModal.data?.transactions.toLocaleString()}</span>
+                    </div>
+                    <div className="detail-item">
+                      <label>Receita:</label>
+                      <span className="detail-value">R$ {viewModal.data?.revenue.toLocaleString()}</span>
+                    </div>
+                    <div className="detail-item">
+                      <label>Taxa de Repasse:</label>
+                      <span className="detail-value">{viewModal.data?.payoutRate.toFixed(2)}%</span>
+                    </div>
+                    <div className="detail-item">
+                      <label>Repasse Médio:</label>
+                      <span className="detail-value">R$ {viewModal.data?.avgPayoutPerTransaction.toFixed(2)}</span>
+                    </div>
+                    <div className="detail-item">
+                      <label>Status:</label>
+                      <StatusBadge status={viewModal.data?.status} count={viewModal.data?.transactions} />
+                    </div>
+                  </div>
+                )}
+              </div>
+              <div className="modal-footer">
+                <button
+                  className="action-btn secondary"
+                  onClick={() => setViewModal({ isOpen: false, data: null, type: null })}
+                >
+                  Fechar
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+
+        {validateModal.isOpen && (
+          <motion.div
+            className="modal-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setValidateModal({ isOpen: false, data: null })}
+          >
+            <motion.div
+              className="modal-content"
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="modal-header">
+                <h3>
+                  <FiCheckCircle /> Validar Cupons
+                </h3>
+                <button
+                  className="modal-close"
+                  onClick={() => setValidateModal({ isOpen: false, data: null })}
+                >
+                  <FiX />
+                </button>
+              </div>
+              <div className="modal-body">
+                <div className="confirmation-message">
+                  <FiAlertCircle className="alert-icon" />
+                  <p>Tem certeza que deseja validar os cupons pendentes?</p>
+                </div>
+                <div className="details-grid">
+                  <div className="detail-item">
+                    <label>Tipo de Cupom:</label>
+                    <span className="detail-value">{validateModal.data?.type}</span>
+                  </div>
+                  <div className="detail-item">
+                    <label>Cupons Pendentes:</label>
+                    <span className="detail-value warning">{validateModal.data?.pendingCoupons.toLocaleString()}</span>
+                  </div>
+                  <div className="detail-item">
+                    <label>Valor Total:</label>
+                    <span className="detail-value">R$ {((validateModal.data?.totalRevenue || 0) * (validateModal.data?.pendingCoupons || 0) / (validateModal.data?.totalCoupons || 1)).toLocaleString()}</span>
+                  </div>
+                </div>
+              </div>
+              <div className="modal-footer">
+                <button
+                  className="action-btn secondary"
+                  onClick={() => setValidateModal({ isOpen: false, data: null })}
+                >
+                  Cancelar
+                </button>
+                <button
+                  className="action-btn primary"
+                  onClick={confirmValidation}
+                >
+                  <FiCheckCircle /> Confirmar Validação
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+
+        {paymentModal.isOpen && (
+          <motion.div
+            className="modal-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setPaymentModal({ isOpen: false, data: null })}
+          >
+            <motion.div
+              className="modal-content"
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="modal-header">
+                <h3>
+                  <FiDollarSign /> Processar Pagamento
+                </h3>
+                <button
+                  className="modal-close"
+                  onClick={() => setPaymentModal({ isOpen: false, data: null })}
+                >
+                  <FiX />
+                </button>
+              </div>
+              <div className="modal-body">
+                <div className="confirmation-message">
+                  <FiAlertCircle className="alert-icon" />
+                  <p>Tem certeza que deseja processar o pagamento deste repasse?</p>
+                </div>
+                <div className="details-grid">
+                  <div className="detail-item">
+                    <label>Estabelecimento:</label>
+                    <span className="detail-value">{paymentModal.data?.store}</span>
+                  </div>
+                  <div className="detail-item">
+                    <label>Mês:</label>
+                    <span className="detail-value">{paymentModal.data?.month}</span>
+                  </div>
+                  <div className="detail-item">
+                    <label>Valor do Repasse:</label>
+                    <span className="detail-value primary">R$ {paymentModal.data?.totalPayout.toLocaleString()}</span>
+                  </div>
+                  <div className="detail-item">
+                    <label>Transações:</label>
+                    <span className="detail-value">{paymentModal.data?.transactions.toLocaleString()}</span>
+                  </div>
+                </div>
+              </div>
+              <div className="modal-footer">
+                <button
+                  className="action-btn secondary"
+                  onClick={() => setPaymentModal({ isOpen: false, data: null })}
+                >
+                  Cancelar
+                </button>
+                <button
+                  className="action-btn success"
+                  onClick={confirmPayment}
+                >
+                  <FiDollarSign /> Confirmar Pagamento
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 };

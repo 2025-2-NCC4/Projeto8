@@ -195,41 +195,29 @@ const FinancialAnalysis = ({ filters, onError }) => {
           <h2>Evolução da Margem Operacional</h2>
           <p>Análise mensal de receita, custos e margem operacional - {operatingMargin?.operatingMargin?.toFixed(2) || '0'}%</p>
         </div>
-        <div className="chart-container">
+        <div className="chart-container-operating-margin">
           <OperatingMarginChart
             data={monthlyMarginData}
             title="Evolução da Margem Operacional"
           />
         </div>
-        <div style={{
-          padding: '2rem 1rem',
-          textAlign: 'center',
-          backgroundColor: 'var(--card-background)',
-          borderRadius: '0 0 1rem 1rem',
-          border: '1px solid var(--border-color)',
-          borderTop: 'none',
-          minHeight: '120px'
-        }}>
-          <div style={{
-            display: 'flex',
-            justifyContent: 'space-around',
-            alignItems: 'center',
-            height: '100%',
-            gap: '1rem'
-          }}>
-            <div style={{ flex: 1 }}>
-              <h4 style={{ marginBottom: '1rem' }}>Receita Total</h4>
-              <p>R$ {operatingMargin?.totalRevenue?.toLocaleString() || '0'}</p>
-            </div>
-            <div style={{ flex: 1 }}>
-              <h4 style={{ marginBottom: '1rem' }}>Custos Totais</h4>
-              <p>R$ {operatingMargin?.totalCosts?.toLocaleString() || '0'}</p>
-            </div>
-            <div style={{ flex: 1 }}>
-              <h4 style={{ marginBottom: '1rem' }}>Margem Média</h4>
-              <p>{operatingMargin?.operatingMargin?.toFixed(2) || '0'}%</p>
-            </div>
-          </div>
+      </motion.div>
+
+      <motion.div className="summary-cards-row" variants={sectionVariants}>
+        <div className="summary-card">
+          <h4>Receita Total</h4>
+          <p className="summary-value">R$ {operatingMargin?.totalRevenue?.toLocaleString() || '0'}</p>
+          <span className="summary-label">Receita bruta total</span>
+        </div>
+        <div className="summary-card">
+          <h4>Custos Totais</h4>
+          <p className="summary-value">R$ {operatingMargin?.totalCosts?.toLocaleString() || '0'}</p>
+          <span className="summary-label">Custos e repasses</span>
+        </div>
+        <div className="summary-card">
+          <h4>Margem Média</h4>
+          <p className="summary-value">{operatingMargin?.operatingMargin?.toFixed(2) || '0'}%</p>
+          <span className="summary-label">Margem operacional</span>
         </div>
       </motion.div>
 

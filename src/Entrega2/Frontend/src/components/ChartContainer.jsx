@@ -154,8 +154,8 @@ export const DualAxisChart = ({ data, loading, className }) => {
       loading={loading}
       className={className}
     >
-      <ResponsiveContainer width="100%" height={380}>
-        <ComposedChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 40 }}>
+      <ResponsiveContainer width="100%" height={450}>
+        <ComposedChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="var(--border-color)" />
           <XAxis
             dataKey="data"
@@ -254,8 +254,8 @@ export const CategoryChart = ({ data, title, loading, className }) => {
       loading={loading}
       className={className}
     >
-      <ResponsiveContainer width="100%" height={280}>
-        <BarChart data={data?.slice(0, 5)} layout="vertical" margin={{ top: 10, right: 30, left: 50, bottom: 5 }}>
+      <ResponsiveContainer width="100%" height={400}>
+        <BarChart data={data?.slice(0, 10)} layout="vertical" margin={{ top: 10, right: 30, left: 50, bottom: 10 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="var(--border-color)" horizontal={false}/>
           <XAxis
             type="number"
@@ -301,7 +301,7 @@ export const NetRevenueChart = ({ data, title, loading, className }) => {
       loading={loading}
       className={className}
     >
-      <ResponsiveContainer width="100%" height={280}>
+      <ResponsiveContainer width="100%" height={400}>
         <BarChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="var(--border-color)" />
           <XAxis
@@ -394,7 +394,7 @@ export const DistributionChart = ({ data, title, dataKey = "value", nameKey = "n
       loading={loading}
       className={className}
     >
-      <ResponsiveContainer width="100%" height={250}>
+      <ResponsiveContainer width="100%" height={400}>
         <PieChart>
           <Pie
             data={data}
@@ -402,8 +402,8 @@ export const DistributionChart = ({ data, title, dataKey = "value", nameKey = "n
             cy="50%"
             labelLine={false}
             label={renderCustomLabel}
-            outerRadius={100}
-            innerRadius={40}
+            outerRadius={140}
+            innerRadius={60}
             fill="#8884d8"
             dataKey={dataKey}
             nameKey={nameKey}
@@ -414,12 +414,26 @@ export const DistributionChart = ({ data, title, dataKey = "value", nameKey = "n
             ))}
           </Pie>
           <Tooltip
-            formatter={(value, name) => {
-              const formattedValue = formatValue(value);
-              return [formattedValue, name || 'Valor'];
+            content={({ active, payload }) => {
+              if (active && payload && payload.length) {
+                const entry = payload[0];
+                const itemName = entry.payload[nameKey] || entry.name || 'Item';
+                const itemValue = formatValue(entry.value);
+                return (
+                  <div className="custom-tooltip">
+                    <div className="tooltip-header">{itemName}</div>
+                    <div className="tooltip-content">
+                      <div className="tooltip-item">
+                        <div className="tooltip-color" style={{ backgroundColor: entry.color }}></div>
+                        <span className="tooltip-name">Valor:</span>
+                        <span className="tooltip-value">{itemValue}</span>
+                      </div>
+                    </div>
+                  </div>
+                );
+              }
+              return null;
             }}
-            labelFormatter={(label) => label || 'Item'}
-            content={<CustomTooltip />}
           />
         </PieChart>
       </ResponsiveContainer>
@@ -456,7 +470,7 @@ export const TemporalChart = ({ data, title, loading, className }) => {
       loading={loading}
       className={className}
     >
-      <ResponsiveContainer width="100%" height={280}>
+      <ResponsiveContainer width="100%" height={450}>
         <ComposedChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="var(--border-color)" />
           <XAxis

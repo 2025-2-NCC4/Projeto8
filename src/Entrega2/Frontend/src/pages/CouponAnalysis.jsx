@@ -261,6 +261,7 @@ const CouponAnalysis = ({ filters, onError }) => {
             data={periodChartData}
             title="Distribuição por Período"
             dataKey="valor"
+            nameKey="tipo"
           />
         </div>
       </motion.div>

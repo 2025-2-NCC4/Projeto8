@@ -14,7 +14,7 @@
   grid-template-columns: 1.2fr 0.8fr;
   gap: 2rem;
   align-items: stretch;
-  min-height: 650px;
+  min-height: 800px;
 }
 
 .geographic-overview {
@@ -117,6 +117,9 @@
   padding: 1.5rem;
   box-shadow: var(--card-shadow); /* Use variable */
   border: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
 }
 
 .chart-header {

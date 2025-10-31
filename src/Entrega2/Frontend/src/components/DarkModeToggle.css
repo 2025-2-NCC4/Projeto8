@@ -1,9 +1,6 @@
 .dark-mode-toggle {
-  position: fixed;
-  bottom: 2rem;
-  left: 2rem;
-  z-index: 1000;
-  background: linear-gradient(135deg, var(--primary-yellow) 0%, var(--secondary-yellow) 100%); /* Keep specific gradient */
+  position: relative;
+  background: linear-gradient(135deg, var(--primary-yellow) 0%, var(--secondary-yellow) 100%);
   border: none;
   border-radius: 50%;
   width: 50px;
@@ -14,6 +11,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 .dark-mode-toggle:hover {
@@ -62,8 +60,6 @@
 
 @media (max-width: 768px) {
   .dark-mode-toggle {
-    bottom: 1rem;
-    left: 1rem;
     width: 44px;
     height: 44px;
   }

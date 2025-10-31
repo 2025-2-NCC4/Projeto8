@@ -1,2 +1,4 @@
-/* Styles for this page are now handled by the common styles in App.css */
-/* This file can be removed if no other page-specific styles are needed. */
+.dashboard-page .chart-section {
+  min-height: auto;
+  padding-bottom: 2rem;
+}

@@ -219,7 +219,7 @@ const Dashboard = ({ filters = {}, onFiltersChange }) => {
           <KPICard
             icon={<FiPieChart />}
             title="Margem Operacional (Média)"
-            value={stats.totalRevenue > 0 ? ((stats.totalRevenue - stats.totalCommission) / stats.totalRevenue * 100) : 0}
+            value={stats.totalRevenue > 0 ? (((stats.totalRevenue - stats.totalCommission) / stats.totalRevenue * 100).toFixed(2)) : '0.00'}
             format="percentage"
             index={3}
           />

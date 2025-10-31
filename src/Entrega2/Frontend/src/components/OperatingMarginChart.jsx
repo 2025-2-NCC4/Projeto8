@@ -21,10 +21,12 @@ const OperatingMarginChart = ({ data, title = "Evolução da Margem Operacional"
       'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'
     ];
 
+    const fixedVariations = [0.8, 1.2, 0.9, 0.7, 1.1, 0.95, 0.85, 1.15, 1.0, 0.75, 1.05, 1.3];
+    const fixedCostRates = [0.14, 0.13, 0.15, 0.16, 0.13, 0.14, 0.15, 0.13, 0.14, 0.16, 0.14, 0.13];
+
     return months.map((month, index) => {
-      // Simular dados baseados na tendência de crescimento do negócio
-      const baseRevenue = 450000 + (index * 35000) + (Math.random() * 50000);
-      const baseCosts = baseRevenue * (0.12 + Math.random() * 0.06); // Entre 12% e 18%
+      const baseRevenue = 450000 + (index * 35000) + (fixedVariations[index] * 25000);
+      const baseCosts = baseRevenue * fixedCostRates[index];
       const margin = ((baseRevenue - baseCosts) / baseRevenue) * 100;
 
       return {
@@ -47,6 +49,10 @@ const OperatingMarginChart = ({ data, title = "Evolução da Margem Operacional"
       margem: item.margem || item.margin || 0,
       lucro: (item.receita || item.revenue || 0) - (item.custos || item.costs || 0)
     }));
+
+    if (chartData.length === 1) {
+      chartData = generateMonthlyData();
+    }
   } else {
     chartData = generateMonthlyData();
   }
@@ -91,8 +97,8 @@ const OperatingMarginChart = ({ data, title = "Evolução da Margem Operacional"
 
   return (
     <div className="operating-margin-chart">
-      <div style={{ marginBottom: '20px' }}>
-        <ResponsiveContainer width="100%" height={350}>
+      <div style={{ marginBottom: '30px' }}>
+        <ResponsiveContainer width="100%" height={400}>
           <AreaChart
             data={chartData}
             margin={{
@@ -136,10 +142,11 @@ const OperatingMarginChart = ({ data, title = "Evolução da Margem Operacional"
               type="monotone"
               dataKey="receita"
               stroke="#8b5cf6"
-              strokeWidth={2}
-              fillOpacity={1}
+              strokeWidth={3}
+              fillOpacity={0.3}
               fill="url(#colorReceita)"
               name="Receita"
+              connectNulls={true}
             />
 
             <Area
@@ -147,10 +154,11 @@ const OperatingMarginChart = ({ data, title = "Evolução da Margem Operacional"
               type="monotone"
               dataKey="custos"
               stroke="#ef4444"
-              strokeWidth={2}
-              fillOpacity={1}
+              strokeWidth={3}
+              fillOpacity={0.3}
               fill="url(#colorCustos)"
               name="Custos"
+              connectNulls={true}
             />
 
             <Area
@@ -158,17 +166,18 @@ const OperatingMarginChart = ({ data, title = "Evolução da Margem Operacional"
               type="monotone"
               dataKey="lucro"
               stroke="#10b981"
-              strokeWidth={2}
-              fillOpacity={1}
+              strokeWidth={3}
+              fillOpacity={0.3}
               fill="url(#colorLucro)"
               name="Lucro Operacional"
+              connectNulls={true}
             />
           </AreaChart>
         </ResponsiveContainer>
       </div>
 
-      <div style={{ marginTop: '20px' }}>
-        <ResponsiveContainer width="100%" height={200}>
+      <div style={{ marginTop: '40px' }}>
+        <ResponsiveContainer width="100%" height={250}>
           <LineChart
             data={chartData}
             margin={{
@@ -198,9 +207,11 @@ const OperatingMarginChart = ({ data, title = "Evolução da Margem Operacional"
               dataKey="margem"
               stroke="#f59e0b"
               strokeWidth={3}
-              dot={{ fill: '#f59e0b', strokeWidth: 2, r: 5 }}
-              activeDot={{ r: 7, stroke: '#f59e0b', strokeWidth: 2 }}
+              dot={{ fill: '#f59e0b', strokeWidth: 2, r: 6 }}
+              activeDot={{ r: 8, stroke: '#f59e0b', strokeWidth: 2, fill: '#fff' }}
               name="Margem Operacional (%)"
+              connectNulls={true}
+              isAnimationActive={true}
             />
           </LineChart>
         </ResponsiveContainer>

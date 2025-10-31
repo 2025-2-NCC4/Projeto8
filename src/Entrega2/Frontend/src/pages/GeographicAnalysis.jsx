@@ -93,7 +93,7 @@ const RegionalPerformanceChart = ({ data }) => {
         <FiBarChart size={24} />
         <h3>Performance por Região</h3>
       </div>
-      <ResponsiveContainer width="100%" height={550}>
+      <ResponsiveContainer width="100%" height={700}>
         <BarChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
           <CartesianGrid strokeDasharray="3 3" vertical={false} />
           <XAxis dataKey="regiao" fontSize={12} />

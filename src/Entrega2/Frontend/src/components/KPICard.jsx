@@ -19,7 +19,8 @@ const KPICard = ({
   trend = [],
   loading = false,
   index = 0,
-  description
+  description,
+  format
 }) => {
   const getIcon = () => {
     if (React.isValidElement(icon)) {
@@ -33,6 +34,16 @@ const KPICard = ({
       case 'users': return <FiUsers size={24} />;
       default: return <FiBarChart size={24} />;
     }
+  };
+
+  const formatValue = (val) => {
+    if (format === 'currency') {
+      return `R$ ${Number(val).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    }
+    if (format === 'percentage') {
+      return `${val}%`;
+    }
+    return val;
   };
 
   const formatTrendData = () => {
@@ -123,11 +134,11 @@ const KPICard = ({
       <div className="kpi-header">
         <div className="kpi-info">
           <h3 className="kpi-title">{title}</h3>
-          <motion.div 
+          <motion.div
             className="kpi-value"
             variants={valueVariants}
           >
-            {value}
+            {formatValue(value)}
           </motion.div>
           {change && changeType ? (
             <div className={`kpi-change ${changeType}`}>

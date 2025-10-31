@@ -1,5 +1,11 @@
 /* Specific styles for CouponAnalysis page */
 
+.coupon-analysis-page .chart-container-half {
+  min-height: 650px;
+  display: flex;
+  flex-direction: column;
+}
+
 .coupon-type-card {
   padding: 1.5rem;
   background-color: var(--card-bg);
@@ -27,6 +33,16 @@
   font-size: 0.9rem;
   color: var(--text-secondary);
   margin-bottom: 0.25rem;
+}
+
+.coupon-analysis-page .chart-section {
+  min-height: auto;
+  padding-bottom: 1.5rem;
+}
+
+.coupon-analysis-page .chart-section:has(.coupon-type-card) {
+  min-height: auto;
+  padding-bottom: 2rem;
 }
 
 /* Responsive adjustments for this page */
