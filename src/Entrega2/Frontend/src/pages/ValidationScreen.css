@@ -1,0 +1,159 @@
+.filter-section {
+  margin-bottom: 2rem;
+}
+
+.filter-controls {
+  display: flex;
+  gap: 2rem;
+  align-items: end;
+  background: var(--card-background);
+  padding: 1.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 200px;
+}
+
+.filter-group label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.filter-group select {
+  padding: 0.75rem;
+  border: 2px solid var(--border-color);
+  border-radius: 0.5rem;
+  background: var(--card-background);
+  color: var(--text-primary);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filter-group select:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.progress-bar {
+  position: relative;
+  width: 100%;
+  height: 24px;
+  background: var(--gray-200);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--success), var(--success-light));
+  border-radius: 12px;
+  transition: width 0.3s ease;
+}
+
+.progress-bar span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.status-badge.validado {
+  background: var(--success-light);
+  color: var(--success);
+  border: 1px solid var(--success-light);
+}
+
+.status-badge.pendente {
+  background: var(--warning-light);
+  color: var(--warning);
+  border: 1px solid var(--warning-light);
+}
+
+.status-badge.pago {
+  background: var(--success-light);
+  color: var(--success);
+  border: 1px solid var(--success-light);
+}
+
+.status-indicator {
+  display: flex;
+  align-items: center;
+}
+
+.status-count {
+  font-weight: 400;
+  opacity: 0.8;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .validation-screen-page {
+    padding: 1.5rem;
+  }
+  .filter-controls {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .filter-group {
+    min-width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .validation-screen-page {
+    padding: 1rem;
+  }
+
+  .page-header {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .validation-table th,
+  .validation-table td,
+  .payout-table th,
+  .payout-table td {
+    padding: 0.5rem;
+  }
+
+  .type-cell,
+  .store-cell {
+    max-width: 100px;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+  }
+}

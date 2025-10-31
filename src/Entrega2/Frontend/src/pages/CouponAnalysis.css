@@ -1,0 +1,43 @@
+/* Specific styles for CouponAnalysis page */
+
+.coupon-type-card {
+  padding: 1.5rem;
+  background-color: var(--card-bg);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  text-align: center;
+  box-shadow: var(--card-shadow);
+  transition: all 0.3s ease;
+}
+
+.coupon-type-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+  border-color: var(--primary);
+}
+
+.coupon-type-card h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.coupon-type-card p {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.25rem;
+}
+
+/* Responsive adjustments for this page */
+@media (max-width: 1024px) {
+  .coupon-analysis-page {
+    padding: var(--spacing-md);
+  }
+}
+
+@media (max-width: 768px) {
+  .coupon-analysis-page {
+    padding: var(--spacing-sm);
+  }
+}

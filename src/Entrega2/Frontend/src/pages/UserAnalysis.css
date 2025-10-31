@@ -1,0 +1,235 @@
+.user-analysis-page {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-analytics-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.peak-hours-section {
+  width: 100%;
+}
+
+.metrics-and-demographics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+.demographic-charts {
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--card-shadow); /* Use variable */
+  border: 1px solid var(--border-color);
+}
+
+.demographic-charts .chart-title {
+  margin-bottom: 1.5rem;
+}
+
+.demographic-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.demo-chart {
+  width: 100%;
+}
+
+.demo-chart h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--text-primary-color);
+  text-align: center;
+}
+
+.time-analysis-metrics {
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--card-shadow); /* Use variable */
+  border: 1px solid var(--border-color);
+}
+
+.peak-hours-heatmap {
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--card-shadow); /* Use variable */
+  border: 1px solid var(--border-color);
+}
+
+.heatmap-header p {
+  font-size: 0.9rem;
+  color: var(--text-secondary-color);
+  margin-top: -1rem; 
+  margin-bottom: 1.5rem;
+}
+
+.heatmap-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.heatmap-grid {
+  display: block;
+  width: 100%;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: var(--spacing-xs);
+  background: var(--body-bg);
+}
+
+.heatmap-hour-header, .heatmap-row {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.day-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  width: 80px;
+  text-align: right;
+  padding-right: 10px;
+  color: var(--text-secondary-color);
+}
+
+.hour-label {
+  font-size: 0.7rem;
+  flex: 1;
+  min-width: 35px;
+  text-align: center;
+  color: var(--text-secondary-color);
+  font-weight: 500;
+}
+
+.heatmap-cell {
+  flex: 1;
+  min-width: 35px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  margin: 1px;
+}
+
+.heatmap-cell:hover {
+  transform: scale(1.2);
+  z-index: 2;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+
+.heatmap-legend {
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
+.legend-title {
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.heatmap-legend .legend-gradient {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.heatmap-legend .gradient-bar {
+  width: 150px;
+  height: 10px;
+  border-radius: 5px;
+  background: linear-gradient(to right, rgba(76, 175, 80, 0.1), rgba(76, 175, 80, 1));
+}
+
+.peak-insights {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.behavioral-insights {
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--card-shadow); /* Use variable */
+  border: 1px solid var(--border-color);
+}
+
+.insights-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+.insight-card {
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  box-shadow: var(--card-shadow); /* Use variable */
+  border: 1px solid var(--border-color);
+}
+
+.insight-title {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.insight-title svg {
+  color: var(--primary-dark-blue);
+  background: linear-gradient(135deg, rgba(13, 71, 161, 0.1), rgba(21, 101, 192, 0.1));
+  padding: 12px;
+  border-radius: 12px;
+  width: 48px;
+  height: 48px;
+}
+
+.insight-title h4 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-primary-color);
+  margin: 0;
+}
+
+.insight-card p {
+  font-size: 0.95rem;
+  color: var(--text-secondary-color);
+  line-height: 1.6;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .metrics-and-demographics {
+    grid-template-columns: 1fr;
+  }
+  
+  .demographic-content {
+    grid-template-columns: 1fr;
+  }
+  
+  .heatmap-container {
+    overflow-x: auto;
+  }
+  
+  .insights-grid {
+    grid-template-columns: 1fr;
+  }
+}

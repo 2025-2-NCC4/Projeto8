@@ -1,0 +1,5 @@
+body {
+  margin: 0;
+  /* Base font and background are now defined in App.css */
+  /* This file can be used for very minimal, absolute global resets if needed, or kept empty. */
+}

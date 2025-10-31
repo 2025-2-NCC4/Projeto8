@@ -1,0 +1,124 @@
+.filter-indicator {
+  background: var(--card-background);
+  border: 1px solid var(--border-color);
+  border-radius: 1rem;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition-smooth);
+}
+
+.filter-indicator:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.filter-indicator-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.filter-indicator-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.clear-all-btn {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.clear-all-btn:hover {
+  background: var(--danger-color);
+  border-color: var(--danger-color);
+  color: white;
+  transform: translateY(-1px);
+}
+
+.filter-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.filter-tag {
+  display: flex;
+  align-items: center;
+  background: var(--hover-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.8rem;
+  transition: var(--transition-smooth);
+}
+
+.filter-tag:hover {
+  background: var(--primary-color);
+  border-color: var(--primary-color);
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.filter-tag:hover .filter-tag-remove {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.filter-tag-label {
+  margin-right: 0.5rem;
+  font-weight: 500;
+}
+
+.filter-tag-remove {
+  background: var(--hover-bg);
+  border: none;
+  color: var(--text-muted);
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.filter-tag-remove:hover {
+  background: var(--danger-color);
+  color: white;
+  transform: scale(1.1);
+}
+
+@media (max-width: 768px) {
+  .filter-indicator {
+    padding: 1rem;
+  }
+  
+  .filter-indicator-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  
+  .filter-tags {
+    gap: 0.5rem;
+  }
+  
+  .filter-tag {
+    padding: 0.375rem 0.625rem;
+    font-size: 0.75rem;
+  }
+}
