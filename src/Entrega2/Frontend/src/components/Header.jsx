@@ -11,7 +11,8 @@ const Header = () => {
 
   const profiles = [
     { value: PROFILES.CEO, label: 'Visão CEO' },
-    { value: PROFILES.CFO, label: 'Visão CFO' }
+    { value: PROFILES.CFO, label: 'Visão CFO' },
+    { value: PROFILES.CTO, label: 'Visão CTO' }
   ];
 
   const currentProfileLabel = profiles.find(p => p.value === currentProfile)?.label || 'Visão CEO';

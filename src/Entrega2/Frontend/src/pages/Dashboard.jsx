@@ -157,9 +157,9 @@ const Dashboard = ({ filters = {}, onFiltersChange }) => {
   // Esta função agora usa o estado 'data' local em vez de props
   const renderKPIs = () => {
     const stats = data.generalStats || {};
-    
-    if (currentProfile === PROFILES.CEO) {
-      // RF03: Foco em performance geral e crescimento
+
+    if (currentProfile === PROFILES.CEO || currentProfile === PROFILES.CTO) {
+      // RF03: Foco em performance geral e crescimento (CEO e CTO)
       return (
         <>
           <KPICard
@@ -190,7 +190,7 @@ const Dashboard = ({ filters = {}, onFiltersChange }) => {
         </>
       );
     }
-    
+
     if (currentProfile === PROFILES.CFO) {
       // RF02: Foco em dados financeiros
       return (
@@ -261,8 +261,8 @@ const Dashboard = ({ filters = {}, onFiltersChange }) => {
   // --- 4. Renderização condicional de Gráficos (do Arquivo 1) ---
   // Modificado para usar os dados processados 'final...Data'
   const renderCharts = () => {
-    if (currentProfile === PROFILES.CEO) {
-      // Gráficos de Crescimento, Campanha, Usuário
+    if (currentProfile === PROFILES.CEO || currentProfile === PROFILES.CTO) {
+      // Gráficos de Crescimento, Campanha, Usuário (CEO e CTO)
       return (
         <>
           <motion.div className="chart-section" variants={sectionVariants}>
@@ -321,10 +321,10 @@ const Dashboard = ({ filters = {}, onFiltersChange }) => {
       <motion.div className="page-header-section" variants={sectionVariants}>
         <div className="page-header">
           <div className="header-content">
-            <h1>Dashboard {currentProfile === PROFILES.CEO ? 'Estratégico (CEO)' : 'Financeiro (CFO)'}</h1>
+            <h1>Dashboard {currentProfile === PROFILES.CEO ? 'Estratégico (CEO)' : currentProfile === PROFILES.CTO ? 'Estratégico (CTO)' : 'Financeiro (CFO)'}</h1>
             <p>
-              {currentProfile === PROFILES.CEO 
-                ? 'Visão executiva dos principais indicadores de performance e crescimento.' 
+              {currentProfile === PROFILES.CEO || currentProfile === PROFILES.CTO
+                ? 'Visão executiva dos principais indicadores de performance e crescimento.'
                 : 'Análise detalhada dos indicadores financeiros, receita e margens.'}
             </p>
           </div>

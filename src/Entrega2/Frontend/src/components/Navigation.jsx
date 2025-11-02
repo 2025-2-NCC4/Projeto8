@@ -55,11 +55,17 @@ const Navigation = ({ currentPage, onPageChange }) => {
   // 3. Define quais páginas cada perfil pode ver.
   const ceoPageIds = ['dashboard', 'users', 'coupons', 'geographic', 'stores'];
   const cfoPageIds = ['dashboard', 'financial', 'coupons', 'validation'];
+  const ctoPageIds = ['dashboard', 'users', 'coupons', 'geographic', 'stores']; // CTO tem mesmas páginas que CEO
 
   // 4. Filtra a lista completa de páginas com base no perfil ativo.
-  const navItems = currentProfile === PROFILES.CEO
-    ? allPages.filter(page => ceoPageIds.includes(page.id))
-    : allPages.filter(page => cfoPageIds.includes(page.id));
+  let navItems;
+  if (currentProfile === PROFILES.CEO) {
+    navItems = allPages.filter(page => ceoPageIds.includes(page.id));
+  } else if (currentProfile === PROFILES.CTO) {
+    navItems = allPages.filter(page => ctoPageIds.includes(page.id));
+  } else {
+    navItems = allPages.filter(page => cfoPageIds.includes(page.id));
+  }
 
   return (
     <nav className="dashboard-navigation">
