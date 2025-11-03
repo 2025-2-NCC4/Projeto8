@@ -37,6 +37,11 @@ let cachedData = {
   lastUpdated: null
 };
 
+let alertSettings = {
+  minRevenue: 0,
+  maxCouponUsagePercent: 100
+};
+
 async function loadCSVData(filename) {
   return new Promise((resolve, reject) => {
     const results = [];
@@ -173,6 +178,65 @@ function applyFilters(transactions, filters) {
   
   return filteredData;
 }
+
+function checkSmartAlerts(data) {
+  const alerts = [];
+  const totalCost = 50000;
+  const totalNewUsers = data.players.length;
+  const cpa = totalCost / totalNewUsers;
+  const cpaThreshold = 5.0; 
+
+  if (cpa > cpaThreshold) {
+    alerts.push({
+      id: 1,
+      profile: 'CFO', 
+      title: 'Custo por Aquisição Alto',
+      message: `O CPA atual é de R$ ${cpa.toFixed(2)}, excedendo o limite de R$ ${cpaThreshold.toFixed(2)}.`,
+      severity: 'high', 
+    });
+  }
+
+  const cuponsCapturados = data.transacoes.length;
+  const cuponsResgatados = data.transacoes.filter(t => t.Status_Cupom === 'Resgatado').length;
+  const taxaResgate = (cuponsResgatados / cuponsCapturados) * 100;
+  const taxaResgateThreshold = 30;
+  if (taxaResgate < taxaResgateThreshold) {
+    alerts.push({
+      id: 2,
+      profile: 'CEO', 
+      title: 'Baixa Taxa de Resgate',
+      message: `A taxa de resgate de cupons é de ${taxaResgate.toFixed(1)}%, abaixo da meta de ${taxaResgateThreshold}%.`,
+      severity: 'medium',
+    });
+  }
+
+  const mediaDiariaTransacoes = 3500;
+  const totalTransacoesHoje = data.transacoes.length;
+  
+  if (totalTransacoesHoje < mediaDiariaTransacoes * 0.8) { 
+    alerts.push({
+      id: 3,
+      profile: 'CTO', 
+      title: 'Baixo Volume de Transações',
+      message: `O volume de transações (${totalTransacoesHoje}) está significativamente abaixo da média diária (${mediaDiariaTransacoes}).`,
+      severity: 'low',
+    });
+  }
+
+  return alerts;
+}
+
+app.get('/api/alerts', (req, res) => {
+  try {
+    const alerts = checkSmartAlerts(cachedData);
+    res.json(alerts);
+
+  } catch (error) {
+    console.error('Error generating alerts:', error);
+    res.status(500).json({ error: 'Failed to generate alerts' });
+  }
+});
+
 
 app.get('/api/general-stats', (req, res) => {
   try {
