@@ -3,7 +3,6 @@ import React, { createContext, useState, useContext } from 'react';
 export const PROFILES = {
   CEO: 'ceo',
   CFO: 'cfo',
-  CTO: 'cto',
 };
 
 const ProfileContext = createContext();

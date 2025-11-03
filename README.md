@@ -83,14 +83,14 @@ O projeto está **100% funcional** e disponível na nuvem!
 
 O **PicMoney Dashboard** é um projeto interdisciplinar desenvolvido em parceria entre a **FECAP** e a **PicMoney**, uma startup inovadora que utiliza **Realidade Aumentada** e **Georreferenciamento** para distribuir cupons virtuais de desconto em redes de parceiros comerciais.
 
-Este dashboard interativo foi desenvolvido especialmente para o público **C-Level (CEOs, CFOs, CTOs)**, integrando dados estratégicos, operacionais e financeiros em uma plataforma de **Business Intelligence** robusta e intuitiva. O sistema permite a exploração de dados simulados em tempo real, com foco na usabilidade e na personalização de indicadores por perfil executivo.
+Este dashboard interativo foi desenvolvido especialmente para o público **C-Level (CEOs e CFOs)**, integrando dados estratégicos, operacionais e financeiros em uma plataforma de **Business Intelligence** robusta e intuitiva. O sistema permite a exploração de dados simulados em tempo real, com foco na usabilidade e na personalização de indicadores por perfil executivo.
 
 ### 🎯 Proposta do Projeto
 
 O desafio proposto aos alunos do 4º semestre de Ciência da Computação foi criar uma solução capaz de:
 
 - **Integrar e visualizar indicadores estratégicos** de forma responsiva e dinâmica
-- **Personalizar dashboards** por perfil executivo (CEO: performance geral, CFO: dados financeiros, CTO: dados operacionais)
+- **Personalizar dashboards** por perfil executivo (CEO: performance geral, CFO: dados financeiros)
 - **Fornecer insights automatizados** através de análises em tempo real
 - **Suportar a tomada de decisão executiva** com métricas consolidadas e filtros avançados
 
@@ -110,7 +110,7 @@ Desenvolver um Dashboard Interativo que integre e apresente, de forma responsiva
 
 1. **Engenharia de Software**: Aplicar conceitos de arquitetura de sistemas no desenvolvimento de dashboards responsivos e dinâmicos
 2. **Análise de Dados**: Modelar, tratar e analisar dados simulados com base em cenários reais de mercado
-3. **Personalização por Perfil**: Criar interfaces customizadas para diferentes perfis executivos (CEO, CFO, CTO)
+3. **Personalização por Perfil**: Criar interfaces customizadas para diferentes perfis executivos (CEO e CFO)
 4. **Inteligência de Negócios**: Integrar conhecimentos de Contabilidade e Finanças no contexto de indicadores de desempenho
 5. **Visualização de Dados**: Implementar dashboards interativos com KPIs estratégicos e análises em tempo real
 6. **Experiência do Usuário**: Garantir usabilidade e responsividade em diferentes dispositivos
@@ -132,7 +132,7 @@ Desenvolver um Dashboard Interativo que integre e apresente, de forma responsiva
 - **Sistema de Filtros Dinâmicos**: Período, região, categoria, tipo de cupom, demografia, faixa de valores
 - **Tema Dark/Light**: Interface adaptável com suporte a tema claro e escuro
 - **Visualizações Interativas**: Gráficos de linha, barras, pizza, heatmaps e pirâmides demográficas
-- **Suporte Multi-perfil**: Dashboards contextualizados por perfil executivo (CEO/CFO/CTO)
+- **Suporte Multi-perfil**: Dashboards contextualizados por perfil executivo (CEO e CFO)
 - **Atualização em Tempo Real**: Sistema simulado de atualização de dados em tempo real
 - **Performance Otimizada**: Tempo de resposta inferior a 2 segundos por interação
 - **Design Responsivo**: Compatibilidade total com dispositivos móveis (desktop, tablet e mobile)

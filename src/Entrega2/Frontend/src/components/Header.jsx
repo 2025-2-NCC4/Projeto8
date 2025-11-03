@@ -33,7 +33,6 @@ const Header = () => {
   const profiles = [
     { value: PROFILES.CEO, label: 'CEO' },
     { value: PROFILES.CFO, label: 'CFO' },
-    { value: PROFILES.CTO, label: 'CTO' },
   ];
 
   const currentProfileLabel = profiles.find(
