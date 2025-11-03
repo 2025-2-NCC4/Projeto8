@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: picmoney-dashboard-backend
+    runtime: node
+    region: oregon
+    plan: free
+    branch: main
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000

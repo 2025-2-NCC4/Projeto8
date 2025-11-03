@@ -14,7 +14,8 @@
     "csv-parser": "^3.0.0",
     "date-fns": "^2.30.0",
     "helmet": "^7.1.0",
-    "compression": "^1.7.4"
+    "compression": "^1.7.4",
+    "dotenv": "^16.3.1"
   },
   "keywords": [
     "dashboard",
