@@ -1,0 +1,70 @@
+.alerts-panel-overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 999;
+}
+
+.alerts-panel {
+  position: absolute;
+  top: 70px;
+  right: 20px;
+  width: 350px;
+  max-height: 400px;
+  overflow-y: auto;
+  background-color: var(--background-color, #fff);
+  border: 1px solid var(--border-color, #ddd);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  padding: 16px;
+  color: var(--text-color, #333);
+}
+
+.alerts-panel h3 {
+  margin-top: 0;
+  border-bottom: 1px solid var(--border-color, #eee);
+  padding-bottom: 8px;
+}
+
+.alert-item {
+  display: flex;
+  align-items: flex-start;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border-color, #f0f0f0);
+}
+
+.alert-item:last-child {
+  border-bottom: none;
+}
+
+.alert-icon {
+  font-size: 20px;
+  margin-right: 12px;
+  margin-top: 3px;
+}
+
+.alert-content strong {
+  font-size: 0.95rem;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.alert-content p {
+  font-size: 0.85rem;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Cores por severidade */
+.alert-item.high .alert-content strong {
+  color: #d9534f;
+}
+.alert-item.medium .alert-content strong {
+  color: #f0ad4e;
+}
+.alert-item.low .alert-content strong {
+  color: #5bc0de;
+}
