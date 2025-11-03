@@ -1,5 +1,15 @@
 # 📊 PicMoney Dashboard - Sistema de Business Intelligence
 
+<p align="center">
+  <a href="https://projeto8-chi.vercel.app/" target="_blank">
+    <img src="https://img.shields.io/badge/🚀_DEMO_ONLINE-Acessar_Aplicação-00C7B7?style=for-the-badge&logo=vercel&logoColor=white" alt="Demo Online">
+  </a>
+  <a href="https://picmoney-dashboard-backend.onrender.com/api/health" target="_blank">
+    <img src="https://img.shields.io/badge/API-Online-success?style=for-the-badge&logo=node.js&logoColor=white" alt="API Status">
+  </a>
+  <img src="https://img.shields.io/badge/Status-Produção-brightgreen?style=for-the-badge" alt="Status">
+</p>
+
 ---
 
 ## 🏫 FECAP - Fundação de Comércio Álvares Penteado
@@ -24,6 +34,48 @@
 - **Prof. [Lucy Mari Tabuti](https://www.linkedin.com/in/lucymari/)**
 - **Prof. [Mauricio Lopes Da Cunha](https://www.linkedin.com/in/mauricio-lopes-da-cunha-5630492a/)**
 - **Prof. [Rodnil da Silva Moreira Lisboa](https://www.linkedin.com/in/professorrodnil/)**
+
+---
+
+## 🌐 Projeto Publicado
+
+<div align="center">
+
+### 🚀 **Acesse a Aplicação Online**
+
+O projeto está **100% funcional** e disponível na nuvem!
+
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <h3>🎨 Frontend</h3>
+      <p><strong>Dashboard Interativo</strong></p>
+      <a href="https://projeto8-chi.vercel.app/" target="_blank">
+        <img src="https://img.shields.io/badge/Vercel-Acessar_Dashboard-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Vercel">
+      </a>
+      <br><br>
+      <p><code>https://projeto8-chi.vercel.app/</code></p>
+    </td>
+    <td align="center" width="50%">
+      <h3>⚙️ Backend</h3>
+      <p><strong>API RESTful</strong></p>
+      <a href="https://picmoney-dashboard-backend.onrender.com/api/health" target="_blank">
+        <img src="https://img.shields.io/badge/Render-API_Online-46E3B7?style=for-the-badge&logo=render&logoColor=white" alt="Render">
+      </a>
+      <br><br>
+      <p><code>https://picmoney-dashboard-backend.onrender.com/api</code></p>
+    </td>
+  </tr>
+</table>
+
+### 📊 Status dos Serviços
+
+![Frontend Status](https://img.shields.io/website?url=https%3A%2F%2Fprojeto8-chi.vercel.app&up_message=Online&down_message=Offline&style=flat-square&logo=vercel&label=Frontend)
+![Backend Status](https://img.shields.io/website?url=https%3A%2F%2Fpicmoney-dashboard-backend.onrender.com%2Fapi%2Fhealth&up_message=Online&down_message=Offline&style=flat-square&logo=node.js&label=Backend%20API)
+
+> **Nota:** O backend pode levar ~30 segundos para "acordar" no primeiro acesso (plano gratuito do Render).
+
+</div>
 
 ---
 
