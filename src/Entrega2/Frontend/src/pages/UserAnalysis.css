@@ -216,20 +216,303 @@
   margin: 0;
 }
 
+.engagement-metrics-section {
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  box-shadow: var(--card-shadow);
+  border: 1px solid var(--border-color);
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.engagement-metrics-section .section-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.engagement-metrics-section .section-header svg {
+  color: var(--primary-dark-blue);
+}
+
+.engagement-metrics-section .section-header h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary-color);
+  margin: 0;
+}
+
+.section-description {
+  font-size: 0.95rem;
+  color: var(--text-secondary-color);
+  margin-bottom: 2rem;
+  margin-left: 2rem;
+}
+
+.engagement-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.engagement-card {
+  background: linear-gradient(135deg, var(--card-bg) 0%, var(--body-bg) 100%);
+  border-radius: 16px;
+  padding: 1.75rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 2px solid var(--border-color);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.engagement-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary-dark-blue), var(--primary-blue));
+}
+
+.engagement-card.primary::before {
+  background: linear-gradient(90deg, #0D47A1, #1565C0);
+}
+
+.engagement-card.success::before {
+  background: linear-gradient(90deg, #2E7D32, #4CAF50);
+}
+
+.engagement-card.info::before {
+  background: linear-gradient(90deg, #1976D2, #42A5F5);
+}
+
+.engagement-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  border-color: var(--primary-blue);
+}
+
+.engagement-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, rgba(13, 71, 161, 0.1), rgba(21, 101, 192, 0.15));
+}
+
+.engagement-card.success .engagement-icon {
+  background: linear-gradient(135deg, rgba(46, 125, 50, 0.1), rgba(76, 175, 80, 0.15));
+}
+
+.engagement-card.info .engagement-icon {
+  background: linear-gradient(135deg, rgba(25, 118, 210, 0.1), rgba(66, 165, 245, 0.15));
+}
+
+.engagement-icon svg {
+  color: var(--primary-dark-blue);
+}
+
+.engagement-card.success .engagement-icon svg {
+  color: #2E7D32;
+}
+
+.engagement-card.info .engagement-icon svg {
+  color: #1976D2;
+}
+
+.engagement-content h4 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-secondary-color);
+  margin: 0 0 0.75rem 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.engagement-value {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #0D47A1;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.engagement-card.success .engagement-value {
+  color: #2E7D32;
+}
+
+.engagement-card.info .engagement-value {
+  color: #1976D2;
+}
+
+.engagement-unit {
+  font-size: 0.85rem;
+  color: var(--text-secondary-color);
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.engagement-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.engagement-detail span {
+  font-size: 0.8rem;
+  color: var(--text-secondary-color);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.engagement-detail span::before {
+  content: '•';
+  color: var(--primary-blue);
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.engagement-summary {
+  background: var(--card-bg);
+  border-radius: 16px;
+  padding: 2rem;
+  border: 2px solid var(--border-color);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  margin-top: 1.5rem;
+}
+
+.summary-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.summary-header svg {
+  color: #0D47A1;
+  width: 24px;
+  height: 24px;
+}
+
+.summary-header h4 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary-color);
+  margin: 0;
+}
+
+.summary-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.25rem;
+}
+
+.summary-item {
+  background: linear-gradient(135deg, var(--body-bg) 0%, var(--card-bg) 100%);
+  border-radius: 12px;
+  padding: 1.5rem;
+  border-left: 5px solid var(--primary-blue);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s ease;
+}
+
+.summary-item:hover {
+  transform: translateX(4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.summary-item.positive {
+  border-left-color: #4CAF50;
+}
+
+.summary-item.neutral {
+  border-left-color: #1976D2;
+}
+
+.summary-item strong {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary-color);
+  margin-bottom: 0.75rem;
+}
+
+.summary-item.positive strong::before {
+  content: '✓';
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #4CAF50;
+  color: white;
+  font-size: 0.85rem;
+  font-weight: 900;
+}
+
+.summary-item.neutral strong::before {
+  content: '→';
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #1976D2;
+  color: white;
+  font-size: 1rem;
+  font-weight: 900;
+}
+
+.summary-item p {
+  font-size: 0.9rem;
+  color: var(--text-secondary-color);
+  margin: 0;
+  line-height: 1.6;
+}
+
 @media (max-width: 768px) {
   .metrics-and-demographics {
     grid-template-columns: 1fr;
   }
-  
+
   .demographic-content {
     grid-template-columns: 1fr;
   }
-  
+
   .heatmap-container {
     overflow-x: auto;
   }
-  
+
   .insights-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .engagement-metrics-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .engagement-value {
+    font-size: 2rem;
+  }
+
+  .summary-cards {
     grid-template-columns: 1fr;
   }
 }

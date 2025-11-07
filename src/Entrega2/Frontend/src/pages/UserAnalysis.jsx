@@ -302,6 +302,141 @@ const UserAnalysis = ({ filters }) => {
         </div>
       </div>
 
+      <div className="engagement-metrics-section">
+        <div className="section-header">
+          <FiActivity size={24} />
+          <h3>Indicadores de Engajamento - Julho 2025</h3>
+        </div>
+        <p className="section-description">
+          Análise completa do comportamento e engajamento dos usuários no período de 01/07/2025 a 31/07/2025
+        </p>
+
+        <div className="engagement-metrics-grid">
+          <div className="engagement-card primary">
+            <div className="engagement-icon">
+              <FiUsers size={28} />
+            </div>
+            <div className="engagement-content">
+              <h4>DAU - Daily Active Users</h4>
+              <div className="engagement-value">2.158,03</div>
+              <div className="engagement-unit">usuários/dia</div>
+              <div className="engagement-detail">
+                <span>Pico: 2.203 (05/jul)</span>
+                <span>Mínimo: 2.102 (08/jul)</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="engagement-card primary">
+            <div className="engagement-icon">
+              <FiCalendar size={28} />
+            </div>
+            <div className="engagement-content">
+              <h4>WAU - Weekly Active Users</h4>
+              <div className="engagement-value">4.385,20</div>
+              <div className="engagement-unit">usuários/semana</div>
+              <div className="engagement-detail">
+                <span>Melhor semana: 4.514 usuários</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="engagement-card primary">
+            <div className="engagement-icon">
+              <FiTrendingUp size={28} />
+            </div>
+            <div className="engagement-content">
+              <h4>MAU - Monthly Active Users</h4>
+              <div className="engagement-value">4.813</div>
+              <div className="engagement-unit">usuários únicos</div>
+              <div className="engagement-detail">
+                <span>Total no período analisado</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="engagement-card success">
+            <div className="engagement-icon">
+              <FiTarget size={28} />
+            </div>
+            <div className="engagement-content">
+              <h4>Taxa de Retenção</h4>
+              <div className="engagement-value">84,71%</div>
+              <div className="engagement-unit">retenção após 30 dias</div>
+              <div className="engagement-detail">
+                <span>3.823 de 4.513 usuários retornaram</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="engagement-card success">
+            <div className="engagement-icon">
+              <FiAlertCircle size={28} />
+            </div>
+            <div className="engagement-content">
+              <h4>Taxa de Churn</h4>
+              <div className="engagement-value">1,27%</div>
+              <div className="engagement-unit">usuários inativos ≥14 dias</div>
+              <div className="engagement-detail">
+                <span>Apenas 61 usuários inativos</span>
+                <span>94,89% ativos recentemente</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="engagement-card info">
+            <div className="engagement-icon">
+              <FiClock size={28} />
+            </div>
+            <div className="engagement-content">
+              <h4>Tempo Médio de Sessão</h4>
+              <div className="engagement-value">24,48</div>
+              <div className="engagement-unit">minutos por sessão</div>
+              <div className="engagement-detail">
+                <span>82.001 sessões identificadas</span>
+                <span>83,26% com até 15 minutos</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="engagement-card info">
+            <div className="engagement-icon">
+              <FiBarChart size={28} />
+            </div>
+            <div className="engagement-content">
+              <h4>Sessões por Usuário</h4>
+              <div className="engagement-value">17,04</div>
+              <div className="engagement-unit">sessões/usuário</div>
+              <div className="engagement-detail">
+                <span>Média no período de 31 dias</span>
+                <span>Top usuário: 54 sessões</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="engagement-summary">
+          <div className="summary-header">
+            <FiTrendingUp size={20} />
+            <h4>Resumo Executivo</h4>
+          </div>
+          <div className="summary-cards">
+            <div className="summary-item positive">
+              <strong>Engajamento Excelente</strong>
+              <p>Alta taxa de retenção (84,71%) indica que os usuários voltam frequentemente ao app</p>
+            </div>
+            <div className="summary-item positive">
+              <strong>Baixo Churn</strong>
+              <p>Apenas 1,27% de churn demonstra satisfação e valor percebido pelos usuários</p>
+            </div>
+            <div className="summary-item neutral">
+              <strong>Sessões Frequentes</strong>
+              <p>Média de 17 sessões/usuário por mês mostra uso regular e consistente</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className="behavioral-insights">
         <div className="insights-header">
           <FiTarget size={24} />
