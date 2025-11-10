@@ -3,29 +3,47 @@
 ## Entrega 1
 <br><br>
 
-### Disciplina 1
+### Contabilidade e Finanças
 
-<b>ALUNO 1- [Trabalho/Documento](https://github.com/fecaphub/Template_PI/blob/main/documentos/Entrega%201/Disciplina%201/Venha%20para%20a%20FECAP!.txt)</b>
-<br><br>
-<b>ALUNO 1- [Trabalho/Documento](https://github.com/fecaphub/Template_PI/blob/main/documentos/Entrega%201/Disciplina%201/Venha%20para%20a%20FECAP!.txt)</b>
-<br><br>
-<b>ALUNO 1- [Trabalho/Documento](https://github.com/fecaphub/Template_PI/blob/main/documentos/Entrega%201/Disciplina%201/Venha%20para%20a%20FECAP!.txt)</b>
+<b>Saulo Pereira de Jesus - [Documento](./Entrega1/Contabilidade%20e%20Financas/Entrega01_Contabilidade_Financas.pdf)</b>
 <br><br>
 
-### Disciplina 2
+### Engenharia de Software e Análise de Sistemas (ES e AS)
 
-<b>ALUNO 1- [Trabalho/Documento](https://github.com/fecaphub/Template_PI/blob/main/documentos/Entrega%201/Disciplina%201/Venha%20para%20a%20FECAP!.txt)</b>
-<br><br>
-<b>ALUNO 1- [Trabalho/Documento](https://github.com/fecaphub/Template_PI/blob/main/documentos/Entrega%201/Disciplina%201/Venha%20para%20a%20FECAP!.txt)</b>
-<br><br>
-<b>ALUNO 1- [Trabalho/Documento](https://github.com/fecaphub/Template_PI/blob/main/documentos/Entrega%201/Disciplina%201/Venha%20para%20a%20FECAP!.txt)</b>
+<b>Saulo Pereira de Jesus - [Documento](./Entrega1/ES_e_AS/Entrega1_ES_e_AS.pdf)</b>
 <br><br>
 
-### Disciplina 3
+### Projeto Interdisciplinar - Ciência de Dados
 
-<b>ALUNO 1- [Trabalho/Documento](https://github.com/fecaphub/Template_PI/blob/main/documentos/Entrega%201/Disciplina%201/Venha%20para%20a%20FECAP!.txt)</b>
+<b>Guilhermy Garcia - [Documento](./Entrega1/Projeto%20Interdisciplinar%20-%20Ciência%20de%20Dados/Projeto%20Interdisciplinar_Ciência%20de%20Dados.pdf)</b>
 <br><br>
-<b>ALUNO 1- [Trabalho/Documento](https://github.com/fecaphub/Template_PI/blob/main/documentos/Entrega%201/Disciplina%201/Venha%20para%20a%20FECAP!.txt)</b>
+
+### Análise Inferencial de Dados
+
+<b>Gustavo Demétrio - [Documento](./Entrega1/Analise%20Inferencial%20de%20Dados/Entrega1_AnaliseInferencial.pdf)</b>
 <br><br>
-<b>ALUNO 1- [Trabalho/Documento](https://github.com/fecaphub/Template_PI/blob/main/documentos/Entrega%201/Disciplina%201/Venha%20para%20a%20FECAP!.txt)</b>
+
+---
+
+## Entrega 2
+<br><br>
+
+### Contabilidade e Finanças
+
+<b>Saulo Pereira de Jesus - [Documento](./Entrega2/Contabilidade%20e%20Financas/Entrega02_Contabilidade_Financas_.pdf)</b>
+<br><br>
+
+### Engenharia de Software e Análise de Sistemas (ES e AS)
+
+<b>Saulo Pereira de Jesus - [Documento](./Entrega2/ES_e_AS/Entrega2_ES_e_AS.pdf)</b>
+<br><br>
+
+### Projeto Interdisciplinar - Ciência de Dados
+
+<b>Guilhermy Garcia - [Documento](./Entrega2/Projeto%20Interdisciplinar%20-%20Ciência%20de%20Dados/Projeto%20Interdisciplinar%20Ciência%20de%20Dados.pdf)</b>
+<br><br>
+
+### Análise Inferencial de Dados
+
+<b>Gustavo Demétrio - [Documento](./Entrega2/Analise%20Inferencial%20de%20Dados/Entrega2_AnaliseInferencial.pdf)</b>
 <br><br>
