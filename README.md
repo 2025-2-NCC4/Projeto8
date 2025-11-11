@@ -23,7 +23,7 @@
 ## 👨‍💻 Integrantes
 
 - [Guilhermy Garcia](https://www.linkedin.com/in/guilhermy-lisboa-garcia-385656223/)
-- [Gustavo Demétrio](https://www.linkedin.com/in/gustavo-demetrio-145151270/)
+- [Gustavo Demetrio](https://www.linkedin.com/in/gustavo-demetrio-145151270/)
 - [Saulo Pereira](https://www.linkedin.com/in/saulo-pereira-jesus/)
 
 ---
@@ -425,7 +425,7 @@ Este projeto foi desenvolvido como parte do Projeto Integrador da **FECAP - Fund
 
 <p align="center">
   <strong>Desenvolvido com dedicação pelos alunos da FECAP</strong><br>
-  Guilhermy Garcia • Gustavo Demétrio • Saulo Pereira<br>
+  Guilhermy Garcia • Gustavo Demetrio • Saulo Pereira<br>
   <em>Projeto Integrador - 2025</em>
 </p>
 
