@@ -20,7 +20,7 @@
 
 ### Análise Inferencial de Dados
 
-<b>Gustavo Demétrio - [Documento](./Entrega1/Analise%20Inferencial%20de%20Dados/Entrega1_AnaliseInferencial.pdf)</b>
+<b>Gustavo Demetrio - [Documento](./Entrega1/Analise%20Inferencial%20de%20Dados/Entrega1_AnaliseInferencial.pdf)</b>
 <br><br>
 
 ---
@@ -45,5 +45,5 @@
 
 ### Análise Inferencial de Dados
 
-<b>Gustavo Demétrio - [Documento](./Entrega2/Analise%20Inferencial%20de%20Dados/Entrega2_AnaliseInferencial.pdf)</b>
+<b>Gustavo Demetrio - [Documento](./Entrega2/Analise%20Inferencial%20de%20Dados/Entrega2_AnaliseInferencial.pdf)</b>
 <br><br>
